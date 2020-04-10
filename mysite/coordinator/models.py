@@ -25,6 +25,14 @@ class Doctor(models.Model):
         verbose_name = "Врач"
         verbose_name_plural = "Врачи"
 
+    def get_list_fields(self):
+        fields = self._meta.get_fields()
+        return fields
+
+    def get_detail_fields(self):
+        fields = self._meta.get_fields()
+        return fields
+
     def records(self):
         records = Record.objects.filter(doctor=self)
         return records
