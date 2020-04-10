@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-#from django.utils import timezone
 
 
 class Doctor(models.Model):
@@ -26,12 +25,24 @@ class Doctor(models.Model):
         verbose_name_plural = "Врачи"
 
     def get_list_fields(self):
-        fields = self._meta.get_fields()
+        fields = []
+        for field in self._meta.fields:
+            fields.append({
+                'name': field.name,
+                'verbose_name': field.verbose_name,
+                'value': field.value_from_object(self)
+            })
         return fields
 
     def get_detail_fields(self):
         fields = self._meta.get_fields()
         return fields
+
+    def get_verbose_name(self):
+        return self._meta.verbose_name
+
+    def get_verbose_name_plural(self):
+        return self._meta.verbose_name_plural
 
     def records(self):
         records = Record.objects.filter(doctor=self)
@@ -74,6 +85,22 @@ class Record(models.Model):
     class Meta:
         verbose_name = "Вызов"
         verbose_name_plural = "Вызовы"
+
+    def get_list_fields(self):
+        fields = []
+        for field in self._meta.fields:
+            fields.append({
+                'name': field.name,
+                'verbose_name': field.verbose_name,
+                'value': field.value_from_object(self)
+            })
+        return fields
+
+    def get_verbose_name(self):
+        return self._meta.verbose_name
+
+    def get_verbose_name_plural(self):
+        return self._meta.verbose_name_plural
 
     @staticmethod
     def unrelated():
