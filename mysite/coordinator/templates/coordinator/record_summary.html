@@ -1,0 +1,56 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Текущее расписание</h1>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" colspan="2">Врач</th>
+                <th scope="col">1</th>
+                <th scope="col">2</th>
+                <th scope="col">3</th>
+                <th scope="col">4</th>
+                <th scope="col">5</th>
+                <th scope="col">6</th>
+                <th scope="col">7</th>
+                <th scope="col">8</th>
+                <th scope="col">9</th>
+                <th scope="col">10</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doctor in doctors %}
+                <tr>
+                    <td rowspan="2">
+                        {{ doctor.name }}
+                    </td>
+                    <td>
+                        Адрес
+                    </td>
+                    {% for record in doctor.records %}
+                        <td>
+                            {{ record.address }}
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>
+                        Время
+                    </td>
+                    {% for record in doctor.records %}
+                        <td>
+                            {{ record.id }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Не назначенные вызовы</h1>
+    <table>
+    </table>
+{% endblock %}
