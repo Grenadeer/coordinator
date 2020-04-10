@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Врачи</h1>
+
+    {% for object in object_list %}
+
+    <div>
+        {{ object.id }}
+    </div>
+    <div>
+        {{ object.name }}
+    </div>
+
+    {% endfor %}
+
+{% endblock %}
