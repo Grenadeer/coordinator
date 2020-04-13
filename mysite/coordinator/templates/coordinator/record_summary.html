@@ -5,7 +5,7 @@
 
     <h1>Текущее расписание</h1>
 
-    <table class="table table-striped table-bordered">
+    <table class="table table-bordered">
         <thead class="thead-dark text-center">
             <tr>
                 <th scope="col" colspan="2">Врач</th>
@@ -31,7 +31,13 @@
                         Адрес
                     </td>
                     {% for record in doctor.records %}
-                        <td>
+                        {% if record.is_finish %}
+                        <td class="table-success">
+                        {% elif record.is_sent %}
+                        <td class="table-warning">
+                        {% else %}
+                        <td class="table-danger">
+                        {% endif %}
                             {{ record.address }}
                         </td>
                     {% endfor %}
@@ -41,8 +47,17 @@
                         Время
                     </td>
                     {% for record in doctor.records %}
-                        <td>
-                            {{ record.id }}
+                        {% if record.is_finish %}
+                        <td class="table-success">
+                        {% elif record.is_sent %}
+                        <td class="table-warning">
+                        {% else %}
+                        <td class="table-danger">
+                        {% endif %}
+                            {{ record.start_date|date:'H:i' }}
+                            {% if record.is_finish %}
+                            ({{ record.finish_date|date:'H:i' }})
+                            {% endif %}
                         </td>
                     {% endfor %}
                 </tr>
@@ -64,7 +79,19 @@
                     <td>
                         {{ record.address }}
                     </td>
-                    <td></td>
+                    <td class="text-right">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ record.id }}"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Назначить
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ record.id }}">
+                                {% for doctor in doctors %}
+                                <a class="dropdown-item" href="#">{{ doctor.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

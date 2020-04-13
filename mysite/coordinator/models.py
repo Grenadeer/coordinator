@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Doctor(models.Model):
@@ -55,6 +56,23 @@ class Record(models.Model):
         help_text="Дата регистрации вызова",
         verbose_name="Дата вызова",
     )
+    start_date = models.DateTimeField(
+        default=timezone.now,
+        help_text="Дата регистрации вызова",
+        verbose_name="Поступил",
+    )
+    send_date = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Дата/время передачи вызова",
+        verbose_name="Передан",
+    )
+    finish_date = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Дата/время завершения вызова",
+        verbose_name="Завершен",
+    )
     doctor = models.ForeignKey(
         Doctor,
         on_delete=models.CASCADE,
@@ -102,6 +120,16 @@ class Record(models.Model):
     def get_verbose_name_plural(self):
         return self._meta.verbose_name_plural
 
+    def is_sent(self):
+        return not self.send_date is None
+
+    def is_finish(self):
+        return not self.finish_date is None
+
     @staticmethod
-    def unrelated():
+    def unassigned():
         return Record.objects.filter(doctor=None)
+
+    def assign(self, doctor):
+        self.doctor = doctor
+        return
