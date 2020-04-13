@@ -3,6 +3,22 @@
 
 {% block content %}
 
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+                <h1 class="">Рабочая дата</h1>
+                <div class="px-2">
+                    <form class="form-inline justify-content-center" action="#" method="get">
+                        <div class="form-group">
+                            <input type="date" id="work_date" name="work_date" class="form-control" value="{{ work_date_get }}">
+                            <input type="submit" class="btn btn-secondary btn-md" value="Установить">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <h1>Текущее расписание</h1>
 
     <table class="table table-bordered">
@@ -46,7 +62,7 @@
                     <td>
                         Время
                     </td>
-                    {% for record in doctor.records %}
+                    {% for record in doctor.records_by_session_date %}
                         {% if record.is_finish %}
                         <td class="table-success">
                         {% elif record.is_sent %}
@@ -58,7 +74,10 @@
                             {% if record.is_finish %}
                             ({{ record.finish_date|date:'H:i' }})
                             {% endif %}
+                        <p>{{ record.start_date }}</p>
+                        <p>{{ work_date }}</p>
                         </td>
+
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -70,6 +89,7 @@
         <thead class="thead-dark text-center">
             <tr>
                 <th scope="col">Адрес</th>
+                <th scope="col">Время поступления</th>
                 <th scope="col">Действия</th>
             </tr>
         </thead>
@@ -78,6 +98,9 @@
                 <tr>
                     <td>
                         {{ record.address }}
+                    </td>
+                    <td>
+                        {{ record.start_date|date:'H:i' }}
                     </td>
                     <td class="text-right">
                         <div class="dropdown">

@@ -6,7 +6,7 @@ from .models import Doctor, Record
 urlpatterns = [
     path('', views.record_summary, name='record_summary'),
     path('record/summary', views.record_summary, name='record_summary'),
-    path('record/assign/(int:pk)', views.record_assign, name='record_summary'),
+    #path('record/assign/(int:pk)', views.record_assign, name='record_summary'),
 
     path('doctor/', ListView.as_view(queryset=Doctor.objects.all(), template_name='coordinator/generic_list.html'),
          name='doctor_list'),

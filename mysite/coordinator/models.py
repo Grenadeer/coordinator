@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-
+from django.utils.timezone import make_aware
+from django.contrib.sessions.backends.db import SessionStore
+from datetime import datetime
 
 class Doctor(models.Model):
     user = models.OneToOneField(
@@ -49,6 +51,15 @@ class Doctor(models.Model):
         records = Record.objects.filter(doctor=self)
         return records
 
+    def records_by_session_date(self):
+        date_format = "%Y-%m-%d"
+        session = SessionStore()
+        print(session)
+        work_date_get = session.get('work_date', timezone.now().strftime(date_format))
+        work_date = make_aware(datetime.strptime(work_date_get, date_format))
+        print(work_date)
+        records = Record.objects.filter(doctor=self).filter(start_date__date=work_date)
+        return records
 
 class Record(models.Model):
     date = models.DateField(
@@ -129,6 +140,10 @@ class Record(models.Model):
     @staticmethod
     def unassigned():
         return Record.objects.filter(doctor=None)
+
+    @staticmethod
+    def unassigned_by_date(date):
+        return Record.objects.filter(doctor=None).filter(start_date__date=date)
 
     def assign(self, doctor):
         self.doctor = doctor
