@@ -25,34 +25,27 @@
         <thead class="thead-dark text-center">
             <tr>
                 <th scope="col" colspan="2">Врач</th>
-                <th scope="col">1</th>
-                <th scope="col">2</th>
-                <th scope="col">3</th>
-                <th scope="col">4</th>
-                <th scope="col">5</th>
-                <th scope="col">6</th>
-                <th scope="col">7</th>
-                <th scope="col">8</th>
-                <th scope="col">9</th>
-                <th scope="col">10</th>
+                {% for record_head in records_head %}
+                <th scope="col" colspan="2">{{ record_head }}</th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
-            {% for doctor in doctors %}
+            {% for element in doctors_records %}
                 <tr>
                     <td rowspan="2">
-                        {{ doctor.name }}
+                        {{ element.doctor.name }}
                     </td>
                     <td>
                         Адрес
                     </td>
-                    {% for record in doctor.records %}
+                    {% for record in element.records %}
                         {% if record.is_finish %}
-                        <td class="table-success">
+                        <td colspan="2" class="table-success">
                         {% elif record.is_sent %}
-                        <td class="table-warning">
+                        <td colspan="2" class="table-warning">
                         {% else %}
-                        <td class="table-danger">
+                        <td colspan="2" class="table-danger">
                         {% endif %}
                             {{ record.address }}
                         </td>
@@ -62,7 +55,7 @@
                     <td>
                         Время
                     </td>
-                    {% for record in doctor.records_by_session_date %}
+                    {% for record in element.records %}
                         {% if record.is_finish %}
                         <td class="table-success">
                         {% elif record.is_sent %}
@@ -74,10 +67,20 @@
                             {% if record.is_finish %}
                             ({{ record.finish_date|date:'H:i' }})
                             {% endif %}
-                        <p>{{ record.start_date }}</p>
-                        <p>{{ work_date }}</p>
                         </td>
-
+                        <td class="text-center">
+                        {% if record.is_finish %}
+                            <button class="btn btn-secondary btn-sm">Завершен</button>
+                        {% elif record.is_sent %}
+                            <a class="btn btn-success btn-sm" href="{% url 'record_finish' pk=record.id %}">
+                                Завешить
+                            </a>
+                        {% else %}
+                            <a class="btn btn-warning btn-sm" href="{% url 'record_send' pk=record.id %}">
+                                Передать
+                            </a>
+                        {% endif %}
+                        </td>
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -109,8 +112,8 @@
                                 Назначить
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ record.id }}">
-                                {% for doctor in doctors %}
-                                <a class="dropdown-item" href="#">{{ doctor.name }}</a>
+                                {% for element in doctors_records %}
+                                <a class="dropdown-item" href="{% url 'record_assign' pk=record.id id=element.doctor.id %}">{{ element.doctor.name }}</a>
                                 {% endfor %}
                             </div>
                         </div>
