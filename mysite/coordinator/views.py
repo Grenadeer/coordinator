@@ -23,6 +23,7 @@ def record_summary(request):
     record_max = 3
     doctors_records = []
     doctors = Doctor.objects.all()
+    records_total = 0
     records_temperature = 0
     records_personally = 0
     records_telephone = 0
@@ -32,6 +33,7 @@ def record_summary(request):
         for record in doctor.records_by_date(work_date):
             records.append(record)
             record_count += 1
+            records_total += 1
             if record.is_finish():
                 if record.is_personally():
                     records_personally += 1
@@ -56,6 +58,7 @@ def record_summary(request):
             'doctors_records': doctors_records,
             'records_head': [i for i in range(1, record_max + 1)],
             'work_date_get': work_date_get,
+            'records_total': records_total,
             'records_temperature': records_temperature,
             'records_personally': records_personally,
             'records_telephone': records_telephone,
