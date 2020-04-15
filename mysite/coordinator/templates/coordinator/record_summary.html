@@ -40,14 +40,21 @@
                         Адрес
                     </td>
                     {% for record in element.records %}
-                        {% if record.is_finish %}
-                        <td colspan="2" class="table-success">
+                        {% if record.is_temperature %}
+                            <td colspan="2" class="table-danger">
+                        {% elif record.is_finish %}
+                            {% if record.is_personally %}
+                                <td colspan="2" class="table-warning">
+                            {% else %}
+                                <td colspan="2" class="table-success">
+                            {% endif %}
                         {% elif record.is_sent %}
-                        <td colspan="2" class="table-warning">
+                        <td colspan="2" class="table-light">
                         {% else %}
-                        <td colspan="2" class="table-danger">
+                        <td colspan="2" class="table-secondary">
                         {% endif %}
-                            {{ record.address }}
+                            {{ record.address }},<br>
+                            {{ record.patient }}, {{ record.patient_birthdate }}
                         </td>
                     {% endfor %}
                 </tr>
@@ -56,12 +63,18 @@
                         Время
                     </td>
                     {% for record in element.records %}
-                        {% if record.is_finish %}
-                        <td class="table-success">
+                        {% if record.is_temperature %}
+                            <td class="table-danger">
+                        {% elif record.is_finish %}
+                            {% if record.is_personally %}
+                                <td class="table-warning">
+                            {% else %}
+                                <td class="table-success">
+                            {% endif %}
                         {% elif record.is_sent %}
-                        <td class="table-warning">
+                        <td class="table-light">
                         {% else %}
-                        <td class="table-danger">
+                        <td class="table-secondary">
                         {% endif %}
                             {{ record.start_date|date:'H:i' }}
                             {% if record.is_finish %}
@@ -72,11 +85,31 @@
                         {% if record.is_finish %}
                             <button class="btn btn-secondary btn-sm">Завершен</button>
                         {% elif record.is_sent %}
-                            <a class="btn btn-success btn-sm" href="{% url 'record_finish' pk=record.id %}">
-                                Завешить
-                            </a>
+                            {% if record.temperature %}
+                                <a class="btn btn-danger btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=1 %}">
+                                    Завешить
+                                </a>
+                            {% else %}
+                                <a class="btn btn-warning btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=2 %}">
+                                    Лично
+                                </a>
+                                <a class="btn btn-success btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=3 %}">
+                                    По телефону
+                                </a>
+                            {% endif %}
+                            <div class="dropdown">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="ddMenuResend{{ record.id }}"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Переназначить
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="ddMenuResend{{ record.id }}">
+                                    {% for element in doctors_records %}
+                                    <a class="dropdown-item" href="{% url 'record_assign' pk=record.id id=element.doctor.id %}">{{ element.doctor.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         {% else %}
-                            <a class="btn btn-warning btn-sm" href="{% url 'record_send' pk=record.id %}">
+                            <a class="btn btn-info btn-sm" href="{% url 'record_send' pk=record.id %}">
                                 Передать
                             </a>
                         {% endif %}
@@ -88,7 +121,13 @@
     </table>
 
     <h1>Неназначенные вызовы</h1>
-    <a class="btn btn-success" href="{% url 'record_create' %}">Добавить</a>
+
+    <div>
+        <span>
+            <a class="btn btn-success" href="{% url 'record_create' %}">Добавить</a>
+        </span>
+    </div>
+
     <table class="table table-striped table-bordered">
         <thead class="thead-dark text-center">
             <tr>
@@ -99,7 +138,11 @@
         </thead>
         <tbody>
             {% for record in unrelated %}
+                {% if record.is_temperature %}
+                <tr class="table-danger">
+                {% else %}
                 <tr>
+                {% endif %}
                     <td>
                         {{ record.address }}
                     </td>
@@ -123,4 +166,36 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <h1>Статистика</h1>
+
+    <table class="table">
+        <tbody>
+            <tr class="table-danger">
+                <td>
+                    Температурные
+                </td>
+                <td>
+                    {{ records_temperature }}
+                </td>
+            </tr>
+            <tr class="table-warning">
+                <td>
+                    Лично
+                </td>
+                <td>
+                    {{ records_personally }}
+                </td>
+            </tr>
+            <tr class="table-success">
+                <td>
+                    По телефону
+                </td>
+                <td>
+                    {{ records_telephone }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
 {% endblock %}

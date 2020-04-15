@@ -17,6 +17,11 @@ class Doctor(models.Model):
         help_text="Фамилия И.О.",
         verbose_name="Имя врача",
     )
+    temperature = models.BooleanField(
+        default=False,
+        help_text="Обслуживает температурные вызовы",
+        verbose_name="Температура",
+    )
 
     def __str__(self):
         return self.name
@@ -60,12 +65,22 @@ class Doctor(models.Model):
         return records
 
 
-class Record(models.Model):
-    date_deprecated = models.DateField(
-        auto_now_add=True,
-        help_text="Дата регистрации вызова",
-        verbose_name="Дата вызова",
+class ServiceType(models.Model):
+    name = models.CharField(
+        max_length=200,
+        help_text="Адрес вызова",
+        verbose_name="Адрес",
     )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Вид обслуживания"
+        verbose_name_plural = "Виды обслуживания"
+
+
+class Record(models.Model):
     start_date = models.DateTimeField(
         default=timezone.now,
         help_text="Дата регистрации вызова",
@@ -96,6 +111,32 @@ class Record(models.Model):
         max_length=200,
         help_text="Адрес вызова",
         verbose_name="Адрес",
+    )
+    patient = models.CharField(
+        max_length=150,
+        default="",
+        help_text="Фамилия И.О.",
+        verbose_name="Пациент",
+    )
+    patient_birthdate = models.DateField(
+        default='1900-01-01',
+        #input_formats=('%d.%m.%Y',),
+        #widget=forms.DateInput(format='%d.%m.%Y'),
+        help_text="Дата рождения пациента",
+        verbose_name="Дата рождения",
+    )
+    temperature = models.BooleanField(
+        default=False,
+        help_text="Температурный вызов",
+        verbose_name="Температура",
+    )
+    service_type = models.ForeignKey(
+        ServiceType,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        help_text="Как был обслужен вызов",
+        verbose_name="Вид обслуживания",
     )
     record_order = models.IntegerField(
         help_text="Порядковый номер вызова",
@@ -151,6 +192,15 @@ class Record(models.Model):
     def is_finish(self):
         return not self.finish_date is None
 
+    def is_temperature(self):
+        return self.temperature
+
+    def is_personally(self):
+        return self.service_type.pk == 2
+
+    def is_telephone(self):
+        return self.service_type.pk == 3
+
     @staticmethod
     def unassigned():
         return Record.objects.filter(doctor=None)
@@ -169,7 +219,8 @@ class Record(models.Model):
         self.save()
         return
 
-    def finish(self):
+    def finish(self, service_type):
         self.finish_date = timezone.now()
+        self.service_type = service_type
         self.save()
         return
