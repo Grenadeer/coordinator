@@ -22,7 +22,7 @@
             <tr>
                 {% for field in object.get_list_fields %}
                 <td>
-                    <a href="{% url 'doctor'+'_detail' pk=object.pk %}">{{ field.value }}</a>
+                    <a href="{% url 'doctor_detail' pk=object.pk %}">{{ field.value }}</a>
                 </td>
                 {% endfor %}
             </tr>
