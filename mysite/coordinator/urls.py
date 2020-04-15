@@ -1,5 +1,5 @@
 from django.urls import path
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from . import views
 from .models import Doctor, Record
 
@@ -17,4 +17,5 @@ urlpatterns = [
     path('record/', ListView.as_view(queryset=Record.objects.all(), template_name='coordinator/generic_list.html'),
          name='record_list'),
     path('record/<int:pk>', DetailView.as_view(model=Record, template_name='coordinator/generic_detail.html'), name='record_detail'),
+    path('record/create', CreateView.as_view(model=Record, fields=['address']), name='record_create'),
 ]

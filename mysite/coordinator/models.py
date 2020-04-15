@@ -61,7 +61,7 @@ class Doctor(models.Model):
 
 
 class Record(models.Model):
-    date = models.DateField(
+    date_deprecated = models.DateField(
         auto_now_add=True,
         help_text="Дата регистрации вызова",
         verbose_name="Дата вызова",
@@ -100,10 +100,15 @@ class Record(models.Model):
     record_order = models.IntegerField(
         help_text="Порядковый номер вызова",
         verbose_name="Порядок",
+        default=0,
     )
 
+    def get_absolute_url(self):
+        #return "/record/%i" % self.id
+        return "/"
+
     def __str__(self):
-        temp = "Вызов от " + self.date.strftime('%d.%m.%Y') + " по адресу <" + self.address + ">"
+        temp = "Вызов от " + self.start_date.strftime('%d.%m.%Y') + " по адресу <" + self.address + ">"
         if self.doctor is None:
             temp = temp + " не назначен"
         else:

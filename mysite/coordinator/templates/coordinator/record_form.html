@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Сохранить">
+    </form>
+
+<!--    <h1>{ { object.get_verbose_name }} - { { object.name }}</h1> -->
+
+<!--    { % for field in object.get_detail_fields %}
+    <div class="row">
+        <div class="col">
+            { { field.verbose_name }}
+        </div>
+        <div class="col">
+            { { field.value }}
+        </div>
+    </div>
+    { % endfor %} -->
+
+{% endblock %}
