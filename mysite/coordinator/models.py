@@ -32,6 +32,14 @@ class Doctor(models.Model):
         help_text="Фамилия И.О.",
         verbose_name="Имя врача",
     )
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_DEFAULT,
+        default=1,
+        #related_name='doctor_records',
+        help_text="Подразделение, к которому привязан врач",
+        verbose_name="Подразделение",
+    )
     temperature = models.BooleanField(
         default=False,
         help_text="Обслуживает температурные вызовы",
