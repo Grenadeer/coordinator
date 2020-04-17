@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.RemoveField(
-            model_name='record',
+            model_name='date_deprecated',
             name='date',
         ),
         migrations.AddField(
