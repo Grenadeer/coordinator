@@ -32,11 +32,11 @@ class Migration(migrations.Migration):
             name='temperature',
             field=models.BooleanField(default=False, help_text='Обслуживает температурные вызовы', verbose_name='Температура'),
         ),
-        migrations.AddField(
-            model_name='record',
-            name='finish_date',
-            field=models.DateTimeField(blank=True, help_text='Дата/время завершения вызова', null=True, verbose_name='Завершен'),
-        ),
+        #migrations.AddField(
+        #    model_name='record',
+        #    name='finish_date',
+        #    field=models.DateTimeField(blank=True, help_text='Дата/время завершения вызова', null=True, verbose_name='Завершен'),
+        #),
         migrations.AddField(
             model_name='record',
             name='patient',
