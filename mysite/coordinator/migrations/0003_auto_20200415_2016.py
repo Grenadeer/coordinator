@@ -47,16 +47,16 @@ class Migration(migrations.Migration):
             name='patient_birthdate',
             field=models.DateField(default='1900-01-01', help_text='Дата рождения пациента', verbose_name='Дата рождения'),
         ),
-        migrations.AddField(
-            model_name='record',
-            name='send_date',
-            field=models.DateTimeField(blank=True, help_text='Дата/время передачи вызова', null=True, verbose_name='Передан'),
-        ),
-        migrations.AddField(
-            model_name='record',
-            name='start_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, help_text='Дата регистрации вызова', verbose_name='Поступил'),
-        ),
+        #migrations.AddField(
+        #    model_name='record',
+        #    name='send_date',
+        #    field=models.DateTimeField(blank=True, help_text='Дата/время передачи вызова', null=True, verbose_name='Передан'),
+        #),
+        #migrations.AddField(
+        #    model_name='record',
+        #    name='start_date',
+        #    field=models.DateTimeField(default=django.utils.timezone.now, help_text='Дата регистрации вызова', verbose_name='Поступил'),
+        #),
         migrations.AlterField(
             model_name='record',
             name='record_order',
