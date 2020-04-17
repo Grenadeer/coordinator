@@ -18,20 +18,26 @@
                 <th scope="col">Дата рождения</th>
                 <th scope="col">Врач</th>
                 <th scope="col">Обслужен</th>
+                <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
             {% for object in object_list %}
+                <a href="{% url 'record_update' object.pk %}">
             <tr>
-                <td>{{ object.start_date|date:'d.m.Y H:i' }}</td>
-                <td>{{ object.send_date|date:'d.m.Y H:i' }}</td>
-                <td>{{ object.finish_date|date:'d.m.Y H:i' }}</td>
-                <td>{{ object.address }}</td>
-                <td>{{ object.patient }}</td>
-                <td>{{ object.patient_birthdate|date:'d.m.Y' }}</td>
-                <td>{{ object.doctor }}</td>
-                <td>{{ object.service_type }}</td>
+                    <td>{{ object.start_date|date:'d.m.Y H:i' }}</td>
+                    <td>{{ object.send_date|date:'d.m.Y H:i' }}</td>
+                    <td>{{ object.finish_date|date:'d.m.Y H:i' }}</td>
+                    <td>{{ object.address }}</td>
+                    <td>{{ object.patient }}</td>
+                    <td>{{ object.patient_birthdate|date:'d.m.Y' }}</td>
+                    <td>{{ object.doctor }}</td>
+                    <td>{{ object.service_type }}</td>
+                    <td>
+                        <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                    </td>
             </tr>
+                </a>
             {% endfor %}
         </tbody>
     </table>

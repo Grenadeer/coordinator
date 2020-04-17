@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.RemoveField(
-            model_name='date_deprecated',
-            name='date',
+            model_name='record',
+            name='date_deprecated',
         ),
         migrations.AddField(
             model_name='doctor',

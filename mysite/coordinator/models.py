@@ -3,6 +3,21 @@ from django.db import models
 from django.utils import timezone
 
 
+class Department(models.Model):
+    name = models.CharField(
+        max_length=100,
+        help_text="Наименование подразделения",
+        verbose_name="Наименование",
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Подразделение"
+        verbose_name_plural = "Подразделения"
+
+
 class Doctor(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -120,6 +135,7 @@ class Record(models.Model):
     )
     patient_birthdate = models.DateField(
         default='1900-01-01',
+        # TODO: Нужно разобраться с форматами и элементом управления на форме для указания дат
         #input_formats=('%d.%m.%Y',),
         #widget=forms.DateInput(format='%d.%m.%Y'),
         help_text="Дата рождения пациента",
@@ -145,6 +161,7 @@ class Record(models.Model):
     )
 
     def get_absolute_url(self):
+        # TODO: Костыль - нужно проработать возврат на нужную страницу в зависимости от источника
         #return "/record/%i" % self.id
         return "/"
 
