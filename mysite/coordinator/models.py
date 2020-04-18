@@ -132,8 +132,27 @@ class Record(models.Model):
     )
     address = models.CharField(
         max_length=200,
+        default="",
         help_text="Адрес вызова",
         verbose_name="Адрес",
+    )
+    address_street = models.CharField(
+        max_length=200,
+        default="",
+        help_text="Улица",
+        verbose_name="Улица",
+    )
+    address_building = models.CharField(
+        max_length=10,
+        default="",
+        help_text="Дом",
+        verbose_name="Дом",
+    )
+    address_apartment = models.CharField(
+        max_length=10,
+        default="",
+        help_text="Квартира",
+        verbose_name="Квартира",
     )
     patient = models.CharField(
         max_length=150,
