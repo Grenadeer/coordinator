@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import ListView, DetailView, CreateView, UpdateView,RedirectView
 from . import views
-from .models import Doctor, Record
+from .models import Doctor, Record, RecordCreateForm
 
 urlpatterns = [
 
@@ -31,11 +31,26 @@ urlpatterns = [
     ), name='record_detail'),
     path('record/create', CreateView.as_view(
         model=Record,
-        fields=['address', 'patient', 'patient_birthdate', 'temperature', 'doctor']
+        # fields=[
+        #     'address',
+        #     'patient',
+        #     'patient_birthdate',
+        #     'temperature',
+        #     'doctor'],
+        form_class=RecordCreateForm,
     ), name='record_create'),
     path('record/update/<int:pk>', UpdateView.as_view(
         model=Record,
-        fields=['address', 'patient', 'patient_birthdate', 'temperature', 'service_type', 'doctor']
+        fields=[
+            'address',
+            'address_street',
+            'address_building',
+            'address_apartment',
+            'patient',
+            'patient_birthdate',
+            'temperature',
+            'service_type',
+            'doctor']
     ), name='record_update'),
     # methods
     path('record/assign/<int:pk>/<int:id>', views.record_assign, name='record_assign'),

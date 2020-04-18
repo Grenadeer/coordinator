@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.forms import ModelForm, DateField, DateTimeField, DateInput
 
 
 class Department(models.Model):
@@ -162,9 +163,6 @@ class Record(models.Model):
     )
     patient_birthdate = models.DateField(
         default='1900-01-01',
-        # TODO: Нужно разобраться с форматами и элементом управления на форме для указания дат
-        #input_formats=('%d.%m.%Y',),
-        #widget=forms.DateInput(format='%d.%m.%Y'),
         help_text="Дата рождения пациента",
         verbose_name="Дата рождения",
     )
@@ -268,3 +266,19 @@ class Record(models.Model):
         self.service_type = service_type
         self.save()
         return
+
+
+class RecordCreateForm(ModelForm):
+    patient_birthdate = DateField(
+        # TODO: Нужно разобраться с форматами и элементом управления на форме для указания дат
+        input_formats=['%d.%m.%Y'],
+        widget=DateInput(format='%d.%m.%Y'),
+    )
+    class Meta:
+        model = Record
+        fields=[
+            'address',
+            'patient',
+            'patient_birthdate',
+            'temperature',
+            'doctor']
