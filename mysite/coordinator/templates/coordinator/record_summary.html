@@ -47,18 +47,19 @@
                     </td>
                     {% for record in element.records %}
                         {% if record.is_temperature %}
-                            <td colspan="2" class="table-danger">
+                            <td colspan="2" class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_finish %}
                             {% if record.is_personally %}
-                                <td colspan="2" class="table-warning">
+                                <td colspan="2" class="table-warning" style="transform: rotate(0);">
                             {% else %}
-                                <td colspan="2" class="table-success">
+                                <td colspan="2" class="table-success" style="transform: rotate(0);">
                             {% endif %}
                         {% elif record.is_sent %}
-                        <td colspan="2" class="table-light">
+                        <td colspan="2" class="table-light" style="transform: rotate(0);">
                         {% else %}
-                        <td colspan="2" class="table-secondary">
+                        <td colspan="2" class="table-secondary" style="transform: rotate(0);">
                         {% endif %}
+                            <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
                             {{ record.address }},<br>
                             {{ record.patient }}, {{ record.patient_birthdate }}
                         </td>
@@ -70,18 +71,19 @@
                     </td>
                     {% for record in element.records %}
                         {% if record.is_temperature %}
-                            <td class="table-danger">
+                            <td class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_finish %}
                             {% if record.is_personally %}
-                                <td class="table-warning">
+                                <td class="table-warning" style="transform: rotate(0);">
                             {% else %}
-                                <td class="table-success">
+                                <td class="table-success" style="transform: rotate(0);">
                             {% endif %}
                         {% elif record.is_sent %}
-                        <td class="table-light">
+                        <td class="table-light" style="transform: rotate(0);">
                         {% else %}
-                        <td class="table-secondary">
+                        <td class="table-secondary" style="transform: rotate(0);">
                         {% endif %}
+                            <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
                             {{ record.start_date|date:'H:i' }}
                             {% if record.is_finish %}
                             ({{ record.finish_date|date:'H:i' }})
