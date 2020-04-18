@@ -31,13 +31,13 @@ urlpatterns = [
     ), name='record_detail'),
     path('record/create', CreateView.as_view(
         model=Record,
-        # fields=[
-        #     'address',
-        #     'patient',
-        #     'patient_birthdate',
-        #     'temperature',
-        #     'doctor'],
-        form_class=RecordCreateForm,
+        fields=[
+            'address',
+            'patient',
+            'patient_birthdate',
+            'temperature',
+            'doctor'],
+        #form_class=RecordCreateForm,
     ), name='record_create'),
     path('record/update/<int:pk>', UpdateView.as_view(
         model=Record,

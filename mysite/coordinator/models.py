@@ -162,7 +162,7 @@ class Record(models.Model):
         verbose_name="Пациент",
     )
     patient_birthdate = models.DateField(
-        default='1900-01-01',
+        default='01.01.1900',
         help_text="Дата рождения пациента",
         verbose_name="Дата рождения",
     )
@@ -269,11 +269,11 @@ class Record(models.Model):
 
 
 class RecordCreateForm(ModelForm):
-    patient_birthdate = DateField(
-        # TODO: Нужно разобраться с форматами и элементом управления на форме для указания дат
-        input_formats=['%d.%m.%Y'],
-        widget=DateInput(format='%d.%m.%Y'),
-    )
+    # patient_birthdate = DateField(
+    #     # TODO: Нужно разобраться с форматами и элементом управления на форме для указания дат
+    #     input_formats=['%d.%m.%Y'],
+    #     widget=DateInput(format='%d.%m.%Y'),
+    # )
     class Meta:
         model = Record
         fields=[
@@ -282,3 +282,6 @@ class RecordCreateForm(ModelForm):
             'patient_birthdate',
             'temperature',
             'doctor']
+        # widgets = {
+        #     'patient_birthdate': DateInput(format='%')
+        # }
