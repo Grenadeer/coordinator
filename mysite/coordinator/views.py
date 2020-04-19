@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView
 from django.utils import timezone
 from django.utils.timezone import make_aware
 from datetime import datetime
@@ -46,9 +48,10 @@ def record_summary(request):
             {
                 'doctor': doctor,
                 'records': records,
+                'count': record_count,
             }
         )
-    unrelated = Record.unassigned_by_date(work_date)
+    unrelated = Record.unassigned_by_date_department(work_date, request.user.profile.department)
 
     return render(
         request,
@@ -85,3 +88,20 @@ def record_finish(request, pk, service_type_pk):
     service_type = get_object_or_404(ServiceType, pk=service_type_pk)
     record.finish(service_type)
     return redirect('record_summary')
+
+
+class RecordCreateView(LoginRequiredMixin, CreateView):
+    model = Record
+    fields = [
+                 'address_street',
+                 'address_building',
+                 'address_apartment',
+                 'patient',
+                 'patient_birthdate',
+                 'temperature',
+                 'doctor'
+             ]
+
+    def form_valid(self, form):
+        form.instance.department = self.request.user.profile.department
+        return super().form_valid(form)

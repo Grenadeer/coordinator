@@ -1,7 +1,10 @@
-from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.forms import ModelForm
 from django.utils import timezone
-from django.forms import ModelForm, DateField, DateTimeField, DateInput
 
 
 class Department(models.Model):
@@ -17,6 +20,40 @@ class Department(models.Model):
     class Meta:
         verbose_name = "Подразделение"
         verbose_name_plural = "Подразделения"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        null=True,
+        help_text="Подразделение",
+        verbose_name="Подразделение",
+    )
+    middle_name = models.CharField(
+        max_length=100,
+        default="",
+        blank=True,
+        help_text="Отчество",
+        verbose_name="Отчество",
+    )
+
+    class Meta:
+        verbose_name = "Профиль пользователя"
+        verbose_name_plural = "Профили пользователей"
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 
 class Doctor(models.Model):
@@ -122,9 +159,18 @@ class Record(models.Model):
         help_text="Дата/время завершения вызова",
         verbose_name="Завершен",
     )
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        #related_name=
+        help_text="Подразделение",
+        verbose_name="Подразделение",
+    )
     doctor = models.ForeignKey(
         Doctor,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name='doctor_records',
@@ -134,6 +180,7 @@ class Record(models.Model):
     address = models.CharField(
         max_length=200,
         default="",
+        blank=True,
         help_text="Адрес вызова",
         verbose_name="Адрес",
     )
@@ -191,7 +238,11 @@ class Record(models.Model):
         return "/"
 
     def __str__(self):
-        temp = "Вызов от " + self.start_date.strftime('%d.%m.%Y') + " по адресу <" + self.address + ">"
+        temp = "Вызов от " + self.start_date.strftime('%d.%m.%Y') + " по адресу <" +\
+               self.address_street + " " +\
+               self.address_building + "-" +\
+               self.address_apartment +\
+               ">"
         if self.doctor is None:
             temp = temp + " не назначен"
         else:
@@ -201,6 +252,9 @@ class Record(models.Model):
     class Meta:
         verbose_name = "Вызов"
         verbose_name_plural = "Вызовы"
+
+    def get_address(self):
+        return self.address_street + " " + self.address_building + "-" + self.address_apartment
 
     def get_list_fields(self):
         fields = []
@@ -250,6 +304,10 @@ class Record(models.Model):
     @staticmethod
     def unassigned_by_date(date):
         return Record.objects.filter(doctor=None).filter(start_date__date=date)
+
+    @staticmethod
+    def unassigned_by_date_department(date, department):
+        return Record.objects.filter(doctor=None).filter(department=department).filter(start_date__date=date)
 
     def assign(self, doctor):
         self.doctor = doctor

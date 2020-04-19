@@ -5,8 +5,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
-                <h1 class="">Рабочая дата</h1>
+            <div class="col-sm">
                 <div class="px-2">
                     <form class="form-inline justify-content-center" action="#" method="get">
                         <div class="form-group">
@@ -15,6 +14,11 @@
                         </div>
                     </form>
                 </div>
+                <p class="text-center"><small>Рабочая дата</small></p>
+            </div>
+            <div class="col-sm">
+                <input type="text" class="form-control text-right" value="{{ user.profile.department }}" disabled>
+                <p class="text-center"><small>Подразделение</small></p>
             </div>
         </div>
     </div>
@@ -40,7 +44,8 @@
             {% for element in doctors_records %}
                 <tr>
                     <td rowspan="2">
-                        {{ element.doctor.name }}
+                        {{ element.doctor.name }}<br>
+                        Вызовов: {{ element.count }}
                     </td>
                     <td>
                         Адрес
@@ -60,7 +65,7 @@
                         <td colspan="2" class="table-secondary" style="transform: rotate(0);">
                         {% endif %}
                             <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
-                            {{ record.address }},<br>
+                            {{ record.get_address }},<br>
                             {{ record.patient }}, {{ record.patient_birthdate }}
                         </td>
                     {% endfor %}
@@ -152,7 +157,7 @@
                 <tr>
                 {% endif %}
                     <td>
-                        {{ record.address }}
+                        {{ record.get_address }}
                     </td>
                     <td>
                         {{ record.start_date|date:'H:i' }}
