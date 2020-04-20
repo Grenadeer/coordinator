@@ -199,6 +199,7 @@ class Record(models.Model):
     address_apartment = models.CharField(
         max_length=10,
         default="",
+        blank=True,
         help_text="Квартира",
         verbose_name="Квартира",
     )
