@@ -1,8 +1,8 @@
 from django.urls import path
-from django.views.generic import ListView, DetailView, CreateView, UpdateView,RedirectView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, RedirectView
 from . import views
 from .models import Doctor, Record
-from .views import RecordCreateView
+from .views import RecordCreateView, RecordUpdateView
 
 urlpatterns = [
 
@@ -31,18 +31,7 @@ urlpatterns = [
         template_name='coordinator/generic_detail.html'
     ), name='record_detail'),
     path('record/create', RecordCreateView.as_view(), name='record_create'),
-    path('record/update/<int:pk>', UpdateView.as_view(
-        model=Record,
-        fields=[
-            'address_street',
-            'address_building',
-            'address_apartment',
-            'patient',
-            'patient_birthdate',
-            'temperature',
-            'service_type',
-            'doctor']
-    ), name='record_update'),
+    path('record/update/<int:pk>', RecordUpdateView.as_view(), name='record_update'),
     # methods
     path('record/assign/<int:pk>/<int:id>', views.record_assign, name='record_assign'),
     path('record/send/<int:pk>', views.record_send, name='record_send'),

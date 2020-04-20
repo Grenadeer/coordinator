@@ -66,7 +66,7 @@
                         {% endif %}
                             <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
                             {{ record.get_address }},<br>
-                            {{ record.patient }}, {{ record.patient_birthdate }}
+                            {{ record.patient }}, {{ record.patient_birthdate|date:'d.m.Y' }}
                         </td>
                     {% endfor %}
                 </tr>
@@ -145,6 +145,7 @@
         <thead class="thead-dark text-center">
             <tr>
                 <th scope="col">Адрес</th>
+                <th scope="col">Пациент</th>
                 <th scope="col">Время поступления</th>
                 <th scope="col">Действия</th>
             </tr>
@@ -158,6 +159,9 @@
                 {% endif %}
                     <td>
                         {{ record.get_address }}
+                    </td>
+                    <td>
+                        {{ record.patient }}, {{ record.patient_birthdate|date:'d.m.Y' }}
                     </td>
                     <td>
                         {{ record.start_date|date:'H:i' }}
@@ -183,39 +187,35 @@
     <h1>Статистика</h1>
 
     <table class="table">
+        <thead>
+            <tr>
+                <th>Подразделение</th>
+                <th>Температурные</th>
+                <th>Лично</th>
+                <th>По телефону</th>
+                <th>Всего</th>
+            </tr>
+        </thead>
         <tbody>
-            <tr class="table-danger">
+            {% for element in statistics %}
+            <tr>
                 <td>
-                    Температурные
+                    {{ element.department }}
                 </td>
-                <td>
-                    {{ records_temperature }}
+                <td class="table-danger">
+                    {{ element.records_temperature }}
                 </td>
-            </tr>
-            <tr class="table-warning">
-                <td>
-                    Лично
+                <td class="table-warning">
+                    {{ element.records_personally }}
                 </td>
-                <td>
-                    {{ records_personally }}
+                <td class="table-success">
+                    {{ element.records_telephone }}
                 </td>
-            </tr>
-            <tr class="table-success">
-                <td>
-                    По телефону
-                </td>
-                <td>
-                    {{ records_telephone }}
+                <td class="table-light">
+                    {{ element.records_total }}
                 </td>
             </tr>
-            <tr class="table-light">
-                <td>
-                    Всего
-                </td>
-                <td>
-                    {{ records_total }}
-                </td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
