@@ -24,7 +24,7 @@ def record_summary(request):
     # Получаем наборы объектов
     record_max = 3
     doctors_records = []
-    doctors = Doctor.objects.all()
+    doctors = Doctor.objects.all().filter(department=request.user.profile.department)
     records_total = 0
     records_temperature = 0
     records_personally = 0
