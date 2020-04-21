@@ -10,9 +10,10 @@ def forwards_func(apps, schema_editor):
     ServiceType = apps.get_model("coordinator", "ServiceType")
     db_alias = schema_editor.connection.alias
     ServiceType.objects.using(db_alias).bulk_create([
-        ServiceType(id=1, name="Температурный"),
-        ServiceType(id=2, name="Лично"),
-        ServiceType(id=3, name="По телефону"),
+        ServiceType(id=1, name="Отменены"),
+        ServiceType(id=2, name="Температурный"),
+        ServiceType(id=3, name="Лично"),
+        ServiceType(id=4, name="По телефону"),
     ])
 
 def reverse_func(apps, schema_editor):
@@ -23,6 +24,7 @@ def reverse_func(apps, schema_editor):
     ServiceType.objects.using(db_alias).filter(id=1).delete()
     ServiceType.objects.using(db_alias).filter(id=2).delete()
     ServiceType.objects.using(db_alias).filter(id=3).delete()
+    ServiceType.objects.using(db_alias).filter(id=4).delete()
 
 
 class Migration(migrations.Migration):

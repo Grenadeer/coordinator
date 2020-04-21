@@ -69,7 +69,9 @@
                         Адрес
                     </td>
                     {% for record in element.records %}
-                        {% if record.is_temperature %}
+                        {% if record.is_canceled %}
+                            <td colspan="2" class="table-secondary" style="transform: rotate(0);">
+                        {% elif record.is_temperature %}
                             <td colspan="2" class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_finish %}
                             {% if record.is_personally %}
@@ -93,7 +95,9 @@
                         Время
                     </td>
                     {% for record in element.records %}
-                        {% if record.is_temperature %}
+                        {% if record.is_canceled %}
+                            <td class="table-secondary" style="transform: rotate(0);">
+                        {% elif record.is_temperature %}
                             <td class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_finish %}
                             {% if record.is_personally %}
@@ -113,7 +117,9 @@
                             {% endif %}
                         </td>
                         <td class="text-center">
-                        {% if record.is_finish %}
+                        {% if record.is_canceled %}
+                            <button class="btn btn-secondary btn-sm">Отменен</button>
+                        {% elif record.is_finish %}
                             <button class="btn btn-secondary btn-sm">Завершен</button>
                         {% elif record.is_sent %}
                             {% if record.temperature %}
@@ -137,6 +143,7 @@
                                     {% for element in doctors_records %}
                                     <a class="dropdown-item" href="{% url 'record_assign' pk=record.id id=element.doctor.id %}">{{ element.doctor.name }}</a>
                                     {% endfor %}
+                                    <a class="dropdown-item" href="{% url 'record_cancel' pk=record.id %}">Отменить</a>
                                 </div>
                             </div>
                         {% else %}
@@ -170,24 +177,38 @@
         </thead>
         <tbody>
             {% for record in unrelated %}
-                {% if record.is_temperature %}
+                {% if record.is_canceled %}
+                <tr class="table-secondary">
+                {% elif record.is_temperature %}
                 <tr class="table-danger">
                 {% else %}
                 <tr>
                 {% endif %}
-                    <td>
+                    <td style="transform: rotate(0);">
+                        <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
                         {{ record.get_address }}
                     </td>
-                    <td>
+                    <td style="transform: rotate(0);">
+                        <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
                         {{ record.patient }}, {{ record.patient_birthdate|date:'d.m.Y' }}
                     </td>
-                    <td>
+                    <td style="transform: rotate(0);">
+                        <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
                         {{ record.start_date|date:'H:i' }}
                     </td>
                     <td class="text-right">
+                        {% if record.is_canceled %}
+                            <button class="btn btn-secondary btn-sm" href="#" role="button">
+                                Отменен
+                            </button>
+                        {% else %}
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ record.id }}"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn btn-secondary btn-sm" href="{% url 'record_cancel' pk=record.id %}">
+                                Отменить
+                            </a>
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button"
+                                    id="dropdownMenuLink{{ record.id }}" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
                                 Назначить
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ record.id }}">
@@ -196,6 +217,7 @@
                                 {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
@@ -208,6 +230,7 @@
         <thead>
             <tr>
                 <th>Подразделение</th>
+                <th>Отменено</th>
                 <th>Температурные</th>
                 <th>Лично</th>
                 <th>По телефону</th>
@@ -219,6 +242,9 @@
             <tr>
                 <td>
                     {{ element.department }}
+                </td>
+                <td class="table-secondary">
+                    {{ element.records_canceled }}
                 </td>
                 <td class="table-danger">
                     {{ element.records_temperature }}

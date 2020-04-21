@@ -298,11 +298,23 @@ class Record(models.Model):
     def is_temperature(self):
         return self.temperature
 
+    def is_canceled(self):
+        if self.service_type:
+            return self.service_type.pk == 1
+        else:
+            return False
+
     def is_personally(self):
-        return self.service_type.pk == 2
+        if self.service_type:
+            return self.service_type.pk == 3
+        else:
+            return False
 
     def is_telephone(self):
-        return self.service_type.pk == 3
+        if self.service_type:
+            return self.service_type.pk == 4
+        else:
+            return False
 
     @staticmethod
     def unassigned():
@@ -318,6 +330,11 @@ class Record(models.Model):
 
     def assign(self, doctor):
         self.doctor = doctor
+        self.save()
+        return
+
+    def cancel(self):
+        self.service_type = ServiceType.objects.get(pk=1)
         self.save()
         return
 

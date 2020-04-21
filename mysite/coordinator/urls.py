@@ -53,6 +53,7 @@ urlpatterns = [
     # methods
     path('record/assign/<int:pk>/<int:id>', views.record_assign, name='record_assign'),
     path('record/send/<int:pk>', views.record_send, name='record_send'),
+    path('record/cancel/<int:pk>', views.record_cancel, name='record_cancel'),
     path('record/finish/<int:pk>/<int:service_type_pk>', views.record_finish, name='record_finish'),
 
     # Show records summary by default
