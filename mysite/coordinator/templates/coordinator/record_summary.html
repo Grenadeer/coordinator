@@ -17,7 +17,24 @@
                 <p class="text-center"><small>Рабочая дата</small></p>
             </div>
             <div class="col-sm">
-                <input type="text" class="form-control text-right" value="{{ user.profile.department }}" disabled>
+                <form class="form-inline justify-content-center" action="#" method="get">
+                    <div class="form-group">
+                        {% if user.is_staff %}
+                        <input type="text" class="form-control text-right" value="{{ user.profile.department }}">
+                        <select name="work_department" id="work_department_id" class="form-control">
+                            {% for element in statistics %}
+                                {% if element.department = work_department %}
+                                <option value selected>{{ element.department }}</option>
+                                {% else %}
+                                <option value="{{ element.department.id }}">{{ element.department }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input type="text" class="form-control text-right" value="{{ user.profile.department }}" disabled>
+                        {% endif %}
+                    </div>
+                </form>
                 <p class="text-center"><small>Подразделение</small></p>
             </div>
         </div>
@@ -66,7 +83,7 @@
                         {% endif %}
                             <a href="{% url 'record_update' record.pk %}"  class="stretched-link"></a>
                             {{ record.get_address }},<br>
-                            {{ record.patient }}, {{ record.patient_birthdate }}
+                            {{ record.patient }}, {{ record.patient_birthdate|date:'d.m.Y' }}
                         </td>
                     {% endfor %}
                 </tr>
@@ -145,6 +162,7 @@
         <thead class="thead-dark text-center">
             <tr>
                 <th scope="col">Адрес</th>
+                <th scope="col">Пациент</th>
                 <th scope="col">Время поступления</th>
                 <th scope="col">Действия</th>
             </tr>
@@ -158,6 +176,9 @@
                 {% endif %}
                     <td>
                         {{ record.get_address }}
+                    </td>
+                    <td>
+                        {{ record.patient }}, {{ record.patient_birthdate|date:'d.m.Y' }}
                     </td>
                     <td>
                         {{ record.start_date|date:'H:i' }}
@@ -183,39 +204,35 @@
     <h1>Статистика</h1>
 
     <table class="table">
+        <thead>
+            <tr>
+                <th>Подразделение</th>
+                <th>Температурные</th>
+                <th>Лично</th>
+                <th>По телефону</th>
+                <th>Всего</th>
+            </tr>
+        </thead>
         <tbody>
-            <tr class="table-danger">
+            {% for element in statistics %}
+            <tr>
                 <td>
-                    Температурные
+                    {{ element.department }}
                 </td>
-                <td>
-                    {{ records_temperature }}
+                <td class="table-danger">
+                    {{ element.records_temperature }}
                 </td>
-            </tr>
-            <tr class="table-warning">
-                <td>
-                    Лично
+                <td class="table-warning">
+                    {{ element.records_personally }}
                 </td>
-                <td>
-                    {{ records_personally }}
+                <td class="table-success">
+                    {{ element.records_telephone }}
                 </td>
-            </tr>
-            <tr class="table-success">
-                <td>
-                    По телефону
-                </td>
-                <td>
-                    {{ records_telephone }}
+                <td class="table-light">
+                    {{ element.records_total }}
                 </td>
             </tr>
-            <tr class="table-light">
-                <td>
-                    Всего
-                </td>
-                <td>
-                    {{ records_total }}
-                </td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 

@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField
 from django.utils import timezone
 
 
@@ -45,6 +45,10 @@ class Profile(models.Model):
     class Meta:
         verbose_name = "Профиль пользователя"
         verbose_name_plural = "Профили пользователей"
+
+    def __str__(self):
+        return self.user.__str__()
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -325,22 +329,3 @@ class Record(models.Model):
         self.service_type = service_type
         self.save()
         return
-
-
-class RecordCreateForm(ModelForm):
-    # patient_birthdate = DateField(
-    #     # TODO: Нужно разобраться с форматами и элементом управления на форме для указания дат
-    #     input_formats=['%d.%m.%Y'],
-    #     widget=DateInput(format='%d.%m.%Y'),
-    # )
-    class Meta:
-        model = Record
-        fields=[
-            'address',
-            'patient',
-            'patient_birthdate',
-            'temperature',
-            'doctor']
-        # widgets = {
-        #     'patient_birthdate': DateInput(format='%')
-        # }
