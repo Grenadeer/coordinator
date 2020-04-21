@@ -17,7 +17,24 @@
                 <p class="text-center"><small>Рабочая дата</small></p>
             </div>
             <div class="col-sm">
-                <input type="text" class="form-control text-right" value="{{ user.profile.department }}" disabled>
+                <form class="form-inline justify-content-center" action="#" method="get">
+                    <div class="form-group">
+                        {% if user.is_staff %}
+                        <input type="text" class="form-control text-right" value="{{ user.profile.department }}">
+                        <select name="work_department" id="work_department_id" class="form-control">
+                            {% for element in statistics %}
+                                {% if element.department = work_department %}
+                                <option value selected>{{ element.department }}</option>
+                                {% else %}
+                                <option value="{{ element.department.id }}">{{ element.department }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input type="text" class="form-control text-right" value="{{ user.profile.department }}" disabled>
+                        {% endif %}
+                    </div>
+                </form>
                 <p class="text-center"><small>Подразделение</small></p>
             </div>
         </div>

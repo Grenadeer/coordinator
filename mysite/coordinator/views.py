@@ -11,6 +11,13 @@ from .models import Department, Doctor, Record, ServiceType
 @login_required
 def record_summary(request):
 
+    # Получаем рабочее подразделение
+    if request.user.is_staff:
+        work_department = request.session.get('work_department', request.user.profile.department)
+    else:
+        work_department = request.user.profile.department
+
+    # Получаем рабочую дату
     # Формат рабочей даты
     date_format = "%Y-%m-%d"
     # Получаем рабочую дату из сессии, если не задана, ставим текущую
@@ -27,7 +34,7 @@ def record_summary(request):
 
     # Основная таблица вызовов по докторам
     doctors_records = []
-    doctors = Doctor.objects.all().filter(department=request.user.profile.department)
+    doctors = Doctor.objects.all().filter(department=work_department)
     for doctor in doctors:
         records = []
         record_count = 0
@@ -55,7 +62,7 @@ def record_summary(request):
         records_telephone = records_finished.filter(service_type__id=3).count()
         statistics.append(
             {
-                'department': department,
+                'work_department': work_department,
                 'records_temperature': records_temperature,
                 'records_personally': records_personally,
                 'records_telephone': records_telephone,
@@ -64,7 +71,7 @@ def record_summary(request):
         )
 
     # Перечень не назначенных вызовов
-    unrelated = Record.unassigned_by_date_department(work_date, request.user.profile.department)
+    unrelated = Record.unassigned_by_date_department(work_date, work_department)
 
     return render(
         request,
@@ -113,8 +120,10 @@ class RecordCreateView(LoginRequiredMixin, CreateView):
     ]
 
     def get_form(self, form_class=None):
+        #work_department = self.request.session.get('work_department', self.request.user.profile.department)
+        work_department = self.request.user.profile.department
         form = super(RecordCreateView, self).get_form(form_class)
-        form.fields['doctor'].queryset = Doctor.objects.filter(department=self.request.user.profile.department)
+        form.fields['doctor'].queryset = Doctor.objects.filter(department=work_department)
         return form
 
     def form_valid(self, form):
@@ -136,6 +145,8 @@ class RecordUpdateView(LoginRequiredMixin, UpdateView):
     ]
 
     def get_form(self, form_class=None):
+        #work_department = self.request.session.get('work_department', self.request.user.profile.department)
+        work_department = self.request.user.profile.department
         form = super(RecordUpdateView, self).get_form(form_class)
-        form.fields['doctor'].queryset = Doctor.objects.filter(department=self.request.user.profile.department)
+        form.fields['doctor'].queryset = Doctor.objects.filter(department=work_department)
         return form

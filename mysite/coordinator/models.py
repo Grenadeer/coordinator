@@ -46,6 +46,10 @@ class Profile(models.Model):
         verbose_name = "Профиль пользователя"
         verbose_name_plural = "Профили пользователей"
 
+    def __str__(self):
+        return self.user.__str__()
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
