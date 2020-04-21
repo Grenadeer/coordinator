@@ -10,6 +10,7 @@
                     <form class="form-inline justify-content-center" action="#" method="get">
                         <div class="form-group">
                             <input type="date" id="work_date" name="work_date" class="form-control" value="{{ work_date_get }}">
+                            <!-- <input type="button" class="btn btn-secondary btn-md" value="Сегодня"> -->
                             <input type="submit" class="btn btn-secondary btn-md" value="Установить">
                         </div>
                     </form>
@@ -20,16 +21,16 @@
                 <form class="form-inline justify-content-center" action="#" method="get">
                     <div class="form-group">
                         {% if user.is_staff %}
-                        <input type="text" class="form-control text-right" value="{{ user.profile.department }}">
                         <select name="work_department" id="work_department_id" class="form-control">
                             {% for element in statistics %}
-                                {% if element.department = work_department %}
-                                <option value selected>{{ element.department }}</option>
+                                {% if element.department.id == work_department.id %}
+                                <option value="{{ element.department.id }}" selected>{{ element.department }}</option>
                                 {% else %}
                                 <option value="{{ element.department.id }}">{{ element.department }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
+                        <input type="submit" class="btn btn-secondary btn-md" value="Изменить">
                         {% else %}
                         <input type="text" class="form-control text-right" value="{{ user.profile.department }}" disabled>
                         {% endif %}

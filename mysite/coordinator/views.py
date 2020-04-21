@@ -13,7 +13,10 @@ def record_summary(request):
 
     # Получаем рабочее подразделение
     if request.user.is_staff:
-        work_department = request.session.get('work_department', request.user.profile.department)
+        work_department_id_session = request.session.get('work_department', request.user.profile.department.id)
+        work_department_id = request.GET.get('work_department', work_department_id_session)
+        request.session['work_department'] = work_department_id
+        work_department = Department.objects.get(pk=work_department_id)
     else:
         work_department = request.user.profile.department
 
@@ -62,7 +65,7 @@ def record_summary(request):
         records_telephone = records_finished.filter(service_type__id=3).count()
         statistics.append(
             {
-                'work_department': work_department,
+                'department': department,
                 'records_temperature': records_temperature,
                 'records_personally': records_personally,
                 'records_telephone': records_telephone,
@@ -78,6 +81,7 @@ def record_summary(request):
         'coordinator/record_summary.html',
         {
             'work_date_get': work_date_get,
+            'work_department': work_department,
             'unrelated': unrelated,
             'doctors_records': doctors_records,
             'records_head': [i for i in range(1, record_max + 1)],
@@ -120,14 +124,16 @@ class RecordCreateView(LoginRequiredMixin, CreateView):
     ]
 
     def get_form(self, form_class=None):
-        #work_department = self.request.session.get('work_department', self.request.user.profile.department)
-        work_department = self.request.user.profile.department
+        work_department_id = self.request.session.get('work_department', self.request.user.profile.department.id)
+        work_department = Department.objects.get(pk=work_department_id)
         form = super(RecordCreateView, self).get_form(form_class)
         form.fields['doctor'].queryset = Doctor.objects.filter(department=work_department)
         return form
 
     def form_valid(self, form):
-        form.instance.department = self.request.user.profile.department
+        work_department_id = self.request.session.get('work_department', self.request.user.profile.department.id)
+        work_department = Department.objects.get(pk=work_department_id)
+        form.instance.department = work_department
         return super().form_valid(form)
 
 
@@ -145,8 +151,8 @@ class RecordUpdateView(LoginRequiredMixin, UpdateView):
     ]
 
     def get_form(self, form_class=None):
-        #work_department = self.request.session.get('work_department', self.request.user.profile.department)
-        work_department = self.request.user.profile.department
+        work_department_id = self.request.session.get('work_department', self.request.user.profile.department.id)
+        work_department = Department.objects.get(pk=work_department_id)
         form = super(RecordUpdateView, self).get_form(form_class)
         form.fields['doctor'].queryset = Doctor.objects.filter(department=work_department)
         return form
