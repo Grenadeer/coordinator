@@ -335,6 +335,7 @@ class Record(models.Model):
 
     def cancel(self):
         self.service_type = ServiceType.objects.get(pk=1)
+        self.finish_date = timezone.now()
         self.save()
         return
 
