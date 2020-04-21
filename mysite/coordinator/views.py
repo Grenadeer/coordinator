@@ -60,6 +60,7 @@ def record_summary(request):
         records_temperature = records_finished.filter(service_type__id=2).count()
         records_personally = records_finished.filter(service_type__id=3).count()
         records_telephone = records_finished.filter(service_type__id=4).count()
+        records_unfinished = records_by_date.filter(finish_date=None)
         statistics.append(
             {
                 'department': department,
@@ -67,6 +68,7 @@ def record_summary(request):
                 'records_temperature': records_temperature,
                 'records_personally': records_personally,
                 'records_telephone': records_telephone,
+                'records_unfinished': records_unfinished,
                 'records_total': records_total,
             }
         )

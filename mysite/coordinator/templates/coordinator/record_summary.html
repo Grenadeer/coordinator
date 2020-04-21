@@ -234,6 +234,7 @@
                 <th>Температурные</th>
                 <th>Лично</th>
                 <th>По телефону</th>
+                <th>Незавершенные</th>
                 <th>Всего</th>
             </tr>
         </thead>
@@ -254,6 +255,9 @@
                 </td>
                 <td class="table-success">
                     {{ element.records_telephone }}
+                </td>
+                <td class="table-light">
+                    {{ element.records_unfinished }}
                 </td>
                 <td class="table-light">
                     {{ element.records_total }}
