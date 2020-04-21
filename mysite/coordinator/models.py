@@ -3,7 +3,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.forms import ModelForm, ModelChoiceField
 from django.utils import timezone
 
 
@@ -94,6 +93,9 @@ class Doctor(models.Model):
     class Meta:
         verbose_name = "Врач"
         verbose_name_plural = "Врачи"
+
+    def get_absolute_url(self):
+        return "/doctor/"
 
     def get_list_fields(self):
         fields = []

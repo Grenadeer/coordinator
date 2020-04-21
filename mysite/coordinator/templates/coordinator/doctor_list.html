@@ -1,0 +1,40 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% with object_list|first as object %}
+    <h1>{{ object.get_verbose_name_plural }}</h1>
+    {% endwith %}
+
+    <div class="text-center">
+        <span>
+            <a class="btn btn-success" href="{% url 'doctor_create' %}">Добавить нового врача</a>
+        </span>
+    </div>
+
+    <br>
+
+    <table class="table table-striped table-bordered table-hover">
+        {% for object in object_list %}
+        {% ifchanged object.department %}
+        <thead class="thead-dark text-center">
+            <tr>
+                <th scope="col" colspan="2">{{ object.department }}</th>
+            </tr>
+        </thead>
+        {% endifchanged %}
+        <tbody>
+            <tr>
+                <td>{{ object.name }}</td>
+                <td class="text-center">
+                    <a href="{% url 'doctor_update' object.pk %}">
+                        <span class="oi oi-pencil" title="Изменить" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+{% endblock %}

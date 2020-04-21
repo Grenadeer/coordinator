@@ -11,12 +11,30 @@ urlpatterns = [
     # views and forms
     path('doctor/', ListView.as_view(
         queryset=Doctor.objects.all(),
-        template_name='coordinator/generic_list.html'
+        ordering=[
+            'department',
+            'id',
+        ],
+        template_name='coordinator/doctor_list.html'
     ), name='doctor_list'),
     path('doctor/<int:pk>', DetailView.as_view(
         model=Doctor,
         template_name='coordinator/generic_detail.html'
     ), name='doctor_detail'),
+    path('doctor/create', CreateView.as_view(
+        model=Doctor,
+        fields=[
+            'department',
+            'name',
+        ],
+    ), name='doctor_create'),
+    path('doctor/update/<int:pk>', UpdateView.as_view(
+        model=Doctor,
+        fields=[
+            'department',
+            'name',
+        ],
+    ), name='doctor_update'),
 
     # Records
 

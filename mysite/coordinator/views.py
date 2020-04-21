@@ -21,13 +21,9 @@ def record_summary(request):
         work_department = request.user.profile.department
 
     # Получаем рабочую дату
-    # Формат рабочей даты
     date_format = "%Y-%m-%d"
-    # Получаем рабочую дату из сессии, если не задана, ставим текущую
     work_date_session = request.session.get('work_date', timezone.now().strftime(date_format))
-    # Получаем рабочую дату из данных формы, если не задана, берем с предыдущего шага
     work_date_get = request.GET.get('work_date', work_date_session)
-    # Формируем объект даты
     work_date = make_aware(datetime.strptime(work_date_get, date_format))
     # Обновляем данные сессии
     request.session['work_date'] = work_date_get
