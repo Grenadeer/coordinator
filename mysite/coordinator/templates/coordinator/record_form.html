@@ -2,13 +2,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-    <form method="POST">
-        {% csrf_token %}
-        <table class="table">
-        {{ form.as_table }}
-        </table>
-        <input type="submit" value="Сохранить">
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <form method="POST">
+                    {% csrf_token %}
+                    <table class="table">
+                    {{ form.as_table }}
+                    </table>
+                    <input type="submit" value="Сохранить">
+                </form>
+            </div>
+            <div class="col">
+                <span>Тут должна быть информация о повторяющихся адресах.</span>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
