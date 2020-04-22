@@ -74,6 +74,25 @@ def record_summary(request):
                 'records_total': records_total,
             }
         )
+    records_by_date = Record.objects.all().filter(start_date__date=work_date)
+    records_total = records_by_date.exclude(doctor=None).count()
+    records_finished = records_by_date.exclude(finish_date=None)
+    records_canceled = records_by_date.filter(service_type__id=1).count()
+    records_temperature = records_finished.filter(service_type__id=2).count()
+    records_personally = records_finished.filter(service_type__id=3).count()
+    records_telephone = records_finished.filter(service_type__id=4).count()
+    records_unfinished = records_by_date.filter(finish_date=None).count()
+    statistics.append(
+        {
+            'department': 'Итого',
+            'records_canceled': records_canceled,
+            'records_temperature': records_temperature,
+            'records_personally': records_personally,
+            'records_telephone': records_telephone,
+            'records_unfinished': records_unfinished,
+            'records_total': records_total,
+        }
+    )
 
     # Перечень не назначенных вызовов
     unrelated = Record.unassigned_by_date_department(work_date, work_department)
