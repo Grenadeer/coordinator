@@ -1,4 +1,4 @@
-
+﻿
 {% extends 'base.html' %}
 
 {% block content %}
@@ -123,14 +123,14 @@
                             <button class="btn btn-secondary btn-sm">Завершен</button>
                         {% elif record.is_sent %}
                             {% if record.temperature %}
-                                <a class="btn btn-danger btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=1 %}">
+                                <a class="btn btn-danger btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=2 %}">
                                     Завешить
                                 </a>
                             {% else %}
-                                <a class="btn btn-warning btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=2 %}">
+                                <a class="btn btn-warning btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=3 %}">
                                     Лично
                                 </a>
-                                <a class="btn btn-success btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=3 %}">
+                                <a class="btn btn-success btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=4 %}">
                                     По телефону
                                 </a>
                             {% endif %}
