@@ -2,19 +2,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    <script src="/static/js/record_list.js"></script>
+
     <div class="container">
         <div class="row">
-            <div class="col-sm">
+            <div class="col">
                 <form method="POST">
                     {% csrf_token %}
                     <table class="table">
-                    {{ form.as_table }}
+                        {{ form.as_table }}
                     </table>
                     <input type="submit" value="Сохранить">
                 </form>
             </div>
             <div class="col">
-                <span>Тут должна быть информация о повторяющихся адресах.</span>
+                <span id="record_table"></span>
             </div>
         </div>
     </div>
