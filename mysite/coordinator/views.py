@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, UpdateView
+from django.forms import HiddenInput
+from django.views.generic.edit import View, CreateView, UpdateView
+from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.timezone import make_aware
 from datetime import datetime
@@ -72,6 +74,25 @@ def record_summary(request):
                 'records_total': records_total,
             }
         )
+    records_by_date = Record.objects.all().filter(start_date__date=work_date)
+    records_total = records_by_date.exclude(doctor=None).count()
+    records_finished = records_by_date.exclude(finish_date=None)
+    records_canceled = records_by_date.filter(service_type__id=1).count()
+    records_temperature = records_finished.filter(service_type__id=2).count()
+    records_personally = records_finished.filter(service_type__id=3).count()
+    records_telephone = records_finished.filter(service_type__id=4).count()
+    records_unfinished = records_by_date.filter(finish_date=None).count()
+    statistics.append(
+        {
+            'department': 'Итого',
+            'records_canceled': records_canceled,
+            'records_temperature': records_temperature,
+            'records_personally': records_personally,
+            'records_telephone': records_telephone,
+            'records_unfinished': records_unfinished,
+            'records_total': records_total,
+        }
+    )
 
     # Перечень не назначенных вызовов
     unrelated = Record.unassigned_by_date_department(work_date, work_department)
@@ -134,6 +155,7 @@ class RecordCreateView(LoginRequiredMixin, CreateView):
         work_department = Department.objects.get(pk=work_department_id)
         form = super(RecordCreateView, self).get_form(form_class)
         form.fields['doctor'].queryset = Doctor.objects.filter(department=work_department)
+        form.fields['address_street'].widget.attrs['onchange'] = 'getData(this.value);'
         return form
 
     def form_valid(self, form):
@@ -146,6 +168,7 @@ class RecordCreateView(LoginRequiredMixin, CreateView):
 class RecordUpdateView(LoginRequiredMixin, UpdateView):
     model = Record
     fields = [
+        'department',
         'address_street',
         'address_building',
         'address_apartment',
@@ -161,4 +184,26 @@ class RecordUpdateView(LoginRequiredMixin, UpdateView):
         work_department = Department.objects.get(pk=work_department_id)
         form = super(RecordUpdateView, self).get_form(form_class)
         form.fields['doctor'].queryset = Doctor.objects.filter(department=work_department)
+        if not self.request.user.is_staff:
+            #form.fields['department'].widget.attrs['readonly'] = 'readonly'
+            form.fields['department'].widget = HiddenInput()
         return form
+
+
+class RecordListJSONView(View):
+    def get(self, request):
+        data = request.GET.get('data')
+        records = list(
+            Record.objects.all().filter(start_date__date=timezone.now()).filter(address_street__contains=data).values(
+                "id",
+                "address_street",
+                "address_building",
+                "address_apartment",
+                "patient",
+                "doctor__name",
+            )
+        )
+        data = dict()
+        print(records)
+        data['records'] = records
+        return JsonResponse(data)

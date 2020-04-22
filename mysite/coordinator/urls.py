@@ -55,6 +55,8 @@ urlpatterns = [
     path('record/send/<int:pk>', views.record_send, name='record_send'),
     path('record/cancel/<int:pk>', views.record_cancel, name='record_cancel'),
     path('record/finish/<int:pk>/<int:service_type_pk>', views.record_finish, name='record_finish'),
+    # json
+    path('record/json/list', views.RecordListJSONView.as_view(), name='record_json_list'),
 
     # Show records summary by default
     path('', RedirectView.as_view(
