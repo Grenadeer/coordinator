@@ -110,6 +110,7 @@ def record_summary(request):
         }
     )
 
+
 @login_required
 def record_assign(request, pk, id):
     record = get_object_or_404(Record, pk=pk)
@@ -118,17 +119,20 @@ def record_assign(request, pk, id):
     record.assign(doctor)
     return redirect('record_summary')
 
+
 @login_required
 def record_cancel(request, pk):
     record = get_object_or_404(Record, pk=pk)
     record.cancel()
     return redirect('record_summary')
 
+
 @login_required
 def record_send(request, pk):
     record = get_object_or_404(Record, pk=pk)
     record.send()
     return redirect('record_summary')
+
 
 @login_required
 def record_finish(request, pk, service_type_pk):
@@ -185,7 +189,6 @@ class RecordUpdateView(LoginRequiredMixin, UpdateView):
         form = super(RecordUpdateView, self).get_form(form_class)
         form.fields['doctor'].queryset = Doctor.objects.filter(department=work_department)
         if not self.request.user.is_staff:
-            #form.fields['department'].widget.attrs['readonly'] = 'readonly'
             form.fields['department'].widget = HiddenInput()
         return form
 

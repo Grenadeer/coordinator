@@ -15,11 +15,11 @@ urlpatterns = [
             'department',
             'id',
         ],
-        template_name='coordinator/doctor_list.html'
+        template_name='doctor_list.html'
     ), name='doctor_list'),
     path('doctor/<int:pk>', DetailView.as_view(
         model=Doctor,
-        template_name='coordinator/generic_detail.html'
+        template_name='generic_detail.html'
     ), name='doctor_detail'),
     path('doctor/create', CreateView.as_view(
         model=Doctor,
@@ -42,11 +42,11 @@ urlpatterns = [
     path('record/summary', views.record_summary, name='record_summary'),
     path('record/', ListView.as_view(
         queryset=Record.objects.all(),
-        template_name='coordinator/record_list.html'
+        template_name='record_list.html'
     ), name='record_list'),
     path('record/<int:pk>', DetailView.as_view(
         model=Record,
-        template_name='coordinator/generic_detail.html'
+        template_name='generic_detail.html'
     ), name='record_detail'),
     path('record/create', RecordCreateView.as_view(), name='record_create'),
     path('record/update/<int:pk>', RecordUpdateView.as_view(), name='record_update'),
