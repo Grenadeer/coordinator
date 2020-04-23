@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, RedirectView
 from . import views
 from .models import Doctor, Record
-from .views import RecordCreateView, RecordUpdateView, RecordDayArchiveView
+from .views import RecordCreateView, RecordUpdateView, RecordDayArchiveView, RecordTodayArchiveView
 
 urlpatterns = [
 
@@ -45,6 +45,7 @@ urlpatterns = [
         template_name='record_list.html'
     ), name='record_list'),
     path('record/day/<int:year>/<int:month>/<int:day>/', RecordDayArchiveView.as_view(), name='record_day'),
+    path('record/day/today/', RecordTodayArchiveView.as_view(), name='record_today'),
     path('record/<int:pk>/', DetailView.as_view(
         model=Record,
         template_name='generic_detail.html'

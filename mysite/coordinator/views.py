@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput
 from django.views.generic.edit import View, CreateView, UpdateView
-from django.views.generic.dates import DayArchiveView
+from django.views.generic.dates import DayArchiveView, TodayArchiveView
 from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.timezone import make_aware
-from datetime import datetime
+from datetime import datetime, date
 from .models import Department, Doctor, Record, ServiceType
 
 
@@ -208,15 +208,28 @@ class RecordListJSONView(View):
             )
         )
         data = dict()
-        print(records)
         data['records'] = records
         return JsonResponse(data)
 
 
 class RecordDayArchiveView(DayArchiveView):
-    queryset = Record.objects.all()
+    model = Record
     date_field = "start_date"
     allow_future = True
     day_format = '%d'
     month_format = '%m'
     year_format = '%Y'
+
+class RecordTodayArchiveView(TodayArchiveView):
+    model = Record
+    date_field = "start_date"
+    day_format = '%d'
+    month_format = '%m'
+    year_format = '%Y'
+
+    def get_dated_items(self):
+        return self._get_dated_items(
+            self.get_previous_day(
+                self._get_next_day(date.today())
+            )
+        )
