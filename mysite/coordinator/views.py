@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput
 from django.views.generic.edit import View, CreateView, UpdateView
+from django.views.generic.dates import DayArchiveView
 from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.timezone import make_aware
@@ -210,3 +211,12 @@ class RecordListJSONView(View):
         print(records)
         data['records'] = records
         return JsonResponse(data)
+
+
+class RecordDayArchiveView(DayArchiveView):
+    queryset = Record.objects.all()
+    date_field = "start_date"
+    allow_future = True
+    day_format = '%d'
+    month_format = '%m'
+    year_format = '%Y'
