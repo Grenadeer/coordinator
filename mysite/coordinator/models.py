@@ -263,6 +263,8 @@ class Record(models.Model):
     def get_address(self):
         return self.address_street + " " + self.address_building + "-" + self.address_apartment
 
+    get_address.short_description = "Адрес"
+
     def get_list_fields(self):
         fields = []
         for field in self._meta.fields:
