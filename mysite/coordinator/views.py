@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput
 from django.views.generic.edit import View, CreateView, UpdateView
 from django.views.generic.dates import DayArchiveView, TodayArchiveView
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.utils import timezone
 from django.utils.timezone import make_aware
 from datetime import datetime, date
@@ -228,8 +228,8 @@ class RecordTodayArchiveView(TodayArchiveView):
     year_format = '%Y'
 
     def get_dated_items(self):
-        return self._get_dated_items(
-            self.get_previous_day(
-                self._get_next_day(date.today())
-            )
-        )
+        prev_day = self.get_previous_day(self._get_next_day(date.today()))
+        if prev_day == None:
+            raise Http404('В базе данных еще нет записей')
+        else:
+            return self._get_dated_items(prev_day)
