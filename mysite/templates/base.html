@@ -33,36 +33,54 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse" id="navbarCollapse" style>
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'record_summary' %}">Сводная</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'doctor_list' %}">Врачи</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'record_today' %}">Вызовы</a>
-            </li>
-          </ul>
-          <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-            <li class="nav-item active">
-              <span class="navbar-text">Добрый день, {{ user.username }}!</span>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
-            </li>
-            {% else %}
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'login' %}">Войти</a>
-            </li>
-            {% endif %}
-            {% if user.is_superuser %}
-            <li>
-              <a class="nav-link" href="{% url 'admin:index' %}">Администрирование</a>
-            </li>
-            {% endif %}
-          </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'record_summary' %}">Сводная</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'doctor_list' %}">Врачи</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'record_today' %}">Вызовы</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="navbar-nav">
+                    <a class="nav-link active" href="/about/">О проекте</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                <li class="nav-item active">
+                    <span class="navbar-text">
+                        Добрый день,
+                        {% if user.first_name %}
+                            {{ user.first_name }}
+                            {% if user.profile %}
+                                {% if user.profile.middle_name %}
+                                    {{ user.profile.middle_name }}
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                        !
+                    </span>
+                </li>
+                {% if user.is_superuser %}
+                <li>
+                  <a class="nav-link" href="{% url 'admin:index' %}">Администрирование</a>
+                </li>
+                {% endif %}
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                </li>
+                {% else %}
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                </li>
+                {% endif %}
+            </ul>
         </div>
     </nav>
 

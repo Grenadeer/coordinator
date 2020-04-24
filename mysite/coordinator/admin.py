@@ -46,5 +46,5 @@ admin.site.register(Record, RecordAdmin)
 
 admin.site.register(Profile)
 
-admin.site.unregister(User)
-admin.site.unregister(Group)
+# admin.site.unregister(User)
+# admin.site.unregister(Group)
