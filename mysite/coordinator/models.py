@@ -170,7 +170,6 @@ class Record(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        #related_name=
         help_text="Подразделение",
         verbose_name="Подразделение",
     )
@@ -179,7 +178,6 @@ class Record(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='doctor_records',
         help_text="Врач назначенный на вызов",
         verbose_name="Врач",
     )
@@ -259,6 +257,7 @@ class Record(models.Model):
     class Meta:
         verbose_name = "Вызов"
         verbose_name_plural = "Вызовы"
+        permissions = [('view_own', 'Can view own')]
 
     def get_address(self):
         return self.address_street + " " + self.address_building + "-" + self.address_apartment
@@ -331,6 +330,7 @@ class Record(models.Model):
         return Record.objects.filter(doctor=None).filter(department=department).filter(start_date__date=date)
 
     def assign(self, doctor):
+        self.send_date = None
         self.doctor = doctor
         self.save()
         return

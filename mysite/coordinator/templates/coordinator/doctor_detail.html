@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>{{ object.get_verbose_name }} - {{ object.name }}</h1>
+
+    {% for field in object.get_detail_fields %}
+    <div class="row">
+        <div class="col">
+            {{ field.verbose_name }}
+        </div>
+        <div class="col">
+            {{ field.value }}
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

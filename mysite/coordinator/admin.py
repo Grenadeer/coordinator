@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from .models import Profile, Department, Doctor, Record, ServiceType
 
 
@@ -39,12 +40,27 @@ class RecordAdmin(admin.ModelAdmin):
     save_on_top = True
 
 
+class ProfileInlineAdmin(admin.StackedInline):
+    model = Profile
+    max_num = 1
+    can_delete = False
+
+
+class UserAdmin(AuthUserAdmin):
+
+    def add_view(self, *args, **kwargs):
+        self.inline = []
+        return super(UserAdmin, self).add_view(*args, **kwargs)
+
+    def change_view(self, *args, **kwargs):
+        self.inlines = [ProfileInlineAdmin]
+        return super(UserAdmin, self).change_view(*args, **kwargs)
+
+
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(ServiceType, ServiceTypeAdmin)
 admin.site.register(Record, RecordAdmin)
 
-admin.site.register(Profile)
-
-# admin.site.unregister(User)
-# admin.site.unregister(Group)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)

@@ -31,29 +31,8 @@
         </button>
         <div class="navbar-collapse collapse" id="navbarCollapse" style>
             <ul class="navbar-nav mr-auto">
-                {% if perms.coordinator.view_record %}
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'record_summary' %}">Сводная</a>
-                </li>
-                {% elif perms.coordinator.view_own_record %}
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'doctor_schedule' %}">Расписание</a>
-                </li>
-                {% endif %}
-                {% if perms.coordinator.view_doctor %}
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'doctor_list' %}">Врачи</a>
-                </li>
-                {% endif %}
-                {% if perms.coordinator.view_record %}
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'record_today' %}">Вызовы</a>
-                </li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav mr-auto">
-                <li class="navbar-nav">
-                    <a class="nav-link active" href="/about/">О проекте</a>
                 </li>
             </ul>
             <ul class="navbar-nav">

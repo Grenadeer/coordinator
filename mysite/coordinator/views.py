@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import HiddenInput
-from django.views.generic.edit import View, CreateView, UpdateView
+from django.views.generic.base import View, RedirectView
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.dates import DayArchiveView, TodayArchiveView
 from django.http import JsonResponse, Http404
 from django.utils import timezone
@@ -11,7 +13,29 @@ from datetime import datetime, date
 from .models import Department, Doctor, Record, ServiceType
 
 
-@login_required
+# Doctor views
+
+class DoctorListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Doctor
+    ordering = [
+                   'department',
+                   'id',
+               ]
+
+
+class DoctorScheduleView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'coordinator.view_own_record'
+    template_name = "coordinator/doctor_schedule.html"
+
+    def get_queryset(self):
+        return Record.objects.all().filter(doctor=self.request.user.doctor)
+
+
+# class Doctor
+
+
+@login_required()
+@permission_required('coordinator.view_record', raise_exception=True)
 def record_summary(request):
 
     # Получаем рабочее подразделение
@@ -112,30 +136,29 @@ def record_summary(request):
     )
 
 
-@login_required
+@permission_required('coordinator.change_record', raise_exception=True)
 def record_assign(request, pk, id):
     record = get_object_or_404(Record, pk=pk)
     doctor = get_object_or_404(Doctor, pk=id)
-    record.send_date = None
     record.assign(doctor)
     return redirect('record_summary')
 
 
-@login_required
+@permission_required('coordinator.change_record', raise_exception=True)
 def record_cancel(request, pk):
     record = get_object_or_404(Record, pk=pk)
     record.cancel()
     return redirect('record_summary')
 
 
-@login_required
+@permission_required('coordinator.change_record', raise_exception=True)
 def record_send(request, pk):
     record = get_object_or_404(Record, pk=pk)
     record.send()
     return redirect('record_summary')
 
 
-@login_required
+@permission_required('coordinator.change_record', raise_exception=True)
 def record_finish(request, pk, service_type_pk):
     record = get_object_or_404(Record, pk=pk)
     service_type = get_object_or_404(ServiceType, pk=service_type_pk)
@@ -143,7 +166,8 @@ def record_finish(request, pk, service_type_pk):
     return redirect('record_summary')
 
 
-class RecordCreateView(LoginRequiredMixin, CreateView):
+class RecordCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'coordinator.add_record'
     model = Record
     fields = [
         'address_street',
@@ -170,7 +194,8 @@ class RecordCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class RecordUpdateView(LoginRequiredMixin, UpdateView):
+class RecordUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'coordinator.change_record'
     model = Record
     fields = [
         'department',
@@ -194,7 +219,10 @@ class RecordUpdateView(LoginRequiredMixin, UpdateView):
         return form
 
 
-class RecordListJSONView(View):
+
+class RecordListJSONView(PermissionRequiredMixin, View):
+    permission_required = 'coordinator.view_record'
+
     def get(self, request):
         data = request.GET.get('data')
         records = list(
@@ -212,7 +240,8 @@ class RecordListJSONView(View):
         return JsonResponse(data)
 
 
-class RecordDayArchiveView(DayArchiveView):
+class RecordDayArchiveView(LoginRequiredMixin, PermissionRequiredMixin, DayArchiveView):
+    permission_required = 'coordinator.view_record'
     model = Record
     date_field = "start_date"
     allow_future = True
@@ -220,7 +249,9 @@ class RecordDayArchiveView(DayArchiveView):
     month_format = '%m'
     year_format = '%Y'
 
-class RecordTodayArchiveView(TodayArchiveView):
+
+class RecordTodayArchiveView(LoginRequiredMixin, PermissionRequiredMixin, TodayArchiveView):
+    permission_required = 'coordinator.view_record'
     model = Record
     date_field = "start_date"
     day_format = '%d'
@@ -229,7 +260,18 @@ class RecordTodayArchiveView(TodayArchiveView):
 
     def get_dated_items(self):
         prev_day = self.get_previous_day(self._get_next_day(date.today()))
-        if prev_day == None:
+        if prev_day is None:
             raise Http404('В базе данных еще нет записей')
         else:
             return self._get_dated_items(prev_day)
+
+
+class RootRedirectView(LoginRequiredMixin, RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        if self.request.user.groups.filter(pk=1).exists():
+            redirect_url = '/record/summary/'
+        else:
+            redirect_url = '/doctor/schedule/'
+        return redirect_url
