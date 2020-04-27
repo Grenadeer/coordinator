@@ -12,6 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='record',
-            options={'permissions': [('view_own', 'Can view own record')], 'verbose_name': 'Вызов', 'verbose_name_plural': 'Вызовы'},
+            options={'permissions': [('view_own_record', 'Can view own record')], 'verbose_name': 'Вызов', 'verbose_name_plural': 'Вызовы'},
         ),
     ]
