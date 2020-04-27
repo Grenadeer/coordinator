@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views
 from django.urls import path, include
+from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
@@ -23,5 +24,6 @@ urlpatterns = [
     path('accounts/login/', views.LoginView.as_view(), name='login'),
     path('accounts/logout/', views.LogoutView.as_view(next_page='/'), name='logout'),
     path('', include('coordinator.urls')),
+    path('favicon.ico', RedirectView.as_view(url='/static/favicon/favicon.ico', permanent=True)),
     path('', include('django.contrib.flatpages.urls')),
 ]
