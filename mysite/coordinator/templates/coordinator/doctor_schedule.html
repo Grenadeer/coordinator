@@ -3,28 +3,77 @@
 
 {% block content %}
 
-    <table class="table table-striped table-bordered table-hover">
-        <thead class="thead-dark text-center">
-            <tr>
-                <th scope="col">Поступил</th>
-                <th scope="col">Передан</th>
-                <th scope="col">Завершен</th>
-                <th scope="col">Адрес</th>
-                <th scope="col">Пациент</th>
-                <th scope="col">Дата рождения</th>
-                <th scope="col">Обслужен</th>
-            </tr>
-        </thead>
+
+    <table class="table table-bordered">
         <tbody>
-            {% for object in object_list %}
+            {% for record in object_list %}
+            <tr class="text-center">
+                {% if record.is_canceled %}
+                    <td colspan="2" class="table-secondary" style="transform: rotate(0);">
+                {% elif record.is_temperature %}
+                    <td colspan="2" class="table-danger" style="transform: rotate(0);">
+                {% elif record.is_finish %}
+                    {% if record.is_personally %}
+                        <td colspan="2" class="table-warning" style="transform: rotate(0);">
+                    {% else %}
+                        <td colspan="2" class="table-success" style="transform: rotate(0);">
+                    {% endif %}
+                {% elif record.is_sent %}
+                <td colspan="2" class="table-light" style="transform: rotate(0);">
+                {% else %}
+                <td colspan="2" class="table-secondary" style="transform: rotate(0);">
+                {% endif %}
+                    <b>{{ record.get_address }},</b><br>
+                    {{ record.patient }}, {{ record.patient_birthdate|date:'d.m.Y' }}
+                </td>
+            </tr>
             <tr>
-                <td>{{ object.start_date|date:'d.m.Y H:i' }}</td>
-                <td>{{ object.send_date|date:'d.m.Y H:i' }}</td>
-                <td>{{ object.finish_date|date:'d.m.Y H:i' }}</td>
-                <td>{{ object.get_address }}</td>
-                <td>{{ object.patient }}</td>
-                <td>{{ object.patient_birthdate|date:'d.m.Y' }}</td>
-                <td>{{ object.service_type|default_if_none:"Не обслужен" }}</td>
+                {% if record.is_canceled %}
+                    <td class="table-secondary" style="transform: rotate(0);">
+                {% elif record.is_temperature %}
+                    <td class="table-danger" style="transform: rotate(0);">
+                {% elif record.is_finish %}
+                    {% if record.is_personally %}
+                        <td class="table-warning" style="transform: rotate(0);">
+                    {% else %}
+                        <td class="table-success" style="transform: rotate(0);">
+                    {% endif %}
+                {% elif record.is_sent %}
+                <td class="table-light" style="transform: rotate(0);">
+                {% else %}
+                <td class="table-secondary" style="transform: rotate(0);">
+                {% endif %}
+                    {{ record.start_date|date:'H:i' }}
+                    {% if record.is_finish %}
+                    ({{ record.finish_date|date:'H:i' }})
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                {% if record.is_canceled %}
+                    <button class="btn btn-secondary btn-sm">Отменен</button>
+                {% elif record.is_finish %}
+                    <button class="btn btn-secondary btn-sm">Завершен</button>
+                {% elif record.is_sent %}
+                    {% if record.temperature %}
+                        <a class="btn btn-danger btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=2 %}">
+                            Завешить
+                        </a>
+                    {% else %}
+                        <a class="btn btn-warning btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=3 %}">
+                            Лично
+                        </a>
+                        <a class="btn btn-success btn-sm" href="{% url 'record_finish' pk=record.id service_type_pk=4 %}">
+                            По телефону
+                        </a>
+                    {% endif %}
+                {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td class="text-center">
+                    Нет записей за сегодняшний день.
+                </td>
             </tr>
             {% endfor %}
         </tbody>

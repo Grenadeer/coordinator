@@ -16,6 +16,7 @@ from .models import Department, Doctor, Record, ServiceType
 # Doctor views
 
 class DoctorListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'coordinator.view_doctor'
     model = Doctor
     ordering = [
                    'department',
@@ -28,7 +29,11 @@ class DoctorScheduleView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = "coordinator/doctor_schedule.html"
 
     def get_queryset(self):
-        return Record.objects.all().filter(doctor=self.request.user.doctor)
+        work_date = timezone.localdate()
+        return Record.objects.all().\
+            filter(doctor=self.request.user.doctor).\
+            filter(start_date__date=work_date).\
+            exclude(send_date=None)
 
 
 # class Doctor
