@@ -19,6 +19,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -31,8 +32,29 @@
         </button>
         <div class="navbar-collapse collapse" id="navbarCollapse" style>
             <ul class="navbar-nav mr-auto">
+                {% if perms.coordinator.view_record %}
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'record_summary' %}">Сводная</a>
+                </li>
+                {% elif perms.coordinator.view_own_record %}
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'doctor_schedule' %}">Расписание</a>
+                </li>
+                {% endif %}
+                {% if perms.coordinator.view_doctor %}
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'doctor_list' %}">Врачи</a>
+                </li>
+                {% endif %}
+                {% if perms.coordinator.view_record %}
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'record_today' %}">Вызовы</a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="navbar-nav">
+                    <a class="nav-link active" href="/about/">О проекте</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
