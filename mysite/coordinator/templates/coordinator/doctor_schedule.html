@@ -69,6 +69,10 @@
                             По телефону
                         </a>
                     {% endif %}
+                    <a class="btn btn-info btn-sm"
+                       href="{% url 'record_finish' pk=record.id service_type_pk=5 %}?next={% url 'doctor_schedule' %}">
+                        Не открыли
+                    </a>
                 {% endif %}
                 </td>
             </tr>

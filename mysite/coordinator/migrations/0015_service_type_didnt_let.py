@@ -9,13 +9,7 @@ def forwards_func(apps, schema_editor):
     ServiceType = apps.get_model("coordinator", "ServiceType")
     db_alias = schema_editor.connection.alias
     ServiceType.objects.using(db_alias).bulk_create([
-        ServiceType(id=5, name="Не пустили"),
-    ])
-    Group = apps.get_model("auth", "group")
-    db_alias = schema_editor.connection.alias
-    Group.objects.using(db_alias).bulk_create([
-        Group(id=1, name="Координаторы"),
-        Group(id=2, name="Врачи"),
+        ServiceType(id=5, name="Не открыли"),
     ])
 
 

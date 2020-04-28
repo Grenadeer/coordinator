@@ -76,6 +76,8 @@
                         {% elif record.is_finish %}
                             {% if record.is_personally %}
                                 <td colspan="2" class="table-warning" style="transform: rotate(0);">
+                            {% elif record.service_type.id == 5 %}
+                                <td colspan="2" class="table-info" style="transform: rotate(0);">
                             {% else %}
                                 <td colspan="2" class="table-success" style="transform: rotate(0);">
                             {% endif %}
@@ -102,6 +104,8 @@
                         {% elif record.is_finish %}
                             {% if record.is_personally %}
                                 <td class="table-warning" style="transform: rotate(0);">
+                            {% elif record.service_type.id == 5 %}
+                                <td class="table-info" style="transform: rotate(0);">
                             {% else %}
                                 <td class="table-success" style="transform: rotate(0);">
                             {% endif %}
@@ -134,6 +138,10 @@
                                     По телефону
                                 </a>
                             {% endif %}
+                            <a class="btn btn-info btn-sm"
+                               href="{% url 'record_finish' pk=record.id service_type_pk=5 %}?next={% url 'doctor_schedule' %}">
+                                Не открыли
+                            </a>
                             <div class="dropdown">
                                 <button class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="ddMenuResend{{ record.id }}"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -234,6 +242,7 @@
                 <th>Температурные</th>
                 <th>Лично</th>
                 <th>По телефону</th>
+                <th>Не открыли</th>
                 <th>Незавершенные</th>
                 <th>Всего</th>
             </tr>
@@ -255,6 +264,9 @@
                 </td>
                 <td class="table-success">
                     {{ element.records_telephone }}
+                </td>
+                <td class="table-info">
+                    {{ element.records_didnt_open }}
                 </td>
                 <td class="table-light">
                     {{ element.records_unfinished }}
