@@ -10,7 +10,6 @@
                     <form class="form-inline justify-content-center" action="#" method="get">
                         <div class="form-group">
                             <input type="date" id="work_date" name="work_date" class="form-control" value="{{ work_date_get }}">
-                            <!-- <input type="button" class="btn btn-secondary btn-md" value="Сегодня"> -->
                             <input type="submit" class="btn btn-secondary btn-md" value="Установить">
                         </div>
                     </form>
@@ -71,9 +70,9 @@
                     {% for record in element.records %}
                         {% if record.is_canceled %}
                             <td colspan="2" class="table-secondary" style="transform: rotate(0);">
-                        {% elif record.is_temperature %}
-                            <td colspan="2" class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_finish %}
+                            {% if record.is_temperature %}
+                                <td colspan="2" class="table-danger" style="transform: rotate(0);">
                             {% if record.is_personally %}
                                 <td colspan="2" class="table-warning" style="transform: rotate(0);">
                             {% elif record.service_type.id == 5 %}
@@ -81,6 +80,8 @@
                             {% else %}
                                 <td colspan="2" class="table-success" style="transform: rotate(0);">
                             {% endif %}
+                        {% elif record.is_temperature %}
+                            <td colspan="2" class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_sent %}
                         <td colspan="2" class="table-light" style="transform: rotate(0);">
                         {% else %}
@@ -99,9 +100,9 @@
                     {% for record in element.records %}
                         {% if record.is_canceled %}
                             <td class="table-secondary" style="transform: rotate(0);">
-                        {% elif record.is_temperature %}
-                            <td class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_finish %}
+                            {% if record.is_temperature %}
+                                <td class="table-warning" style="transform: rotate(0);">
                             {% if record.is_personally %}
                                 <td class="table-warning" style="transform: rotate(0);">
                             {% elif record.service_type.id == 5 %}
@@ -109,6 +110,8 @@
                             {% else %}
                                 <td class="table-success" style="transform: rotate(0);">
                             {% endif %}
+                        {% elif record.is_temperature %}
+                            <td class="table-danger" style="transform: rotate(0);">
                         {% elif record.is_sent %}
                         <td class="table-light" style="transform: rotate(0);">
                         {% else %}
