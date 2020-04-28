@@ -73,7 +73,7 @@
                         {% elif record.is_finish %}
                             {% if record.is_temperature %}
                                 <td colspan="2" class="table-danger" style="transform: rotate(0);">
-                            {% if record.is_personally %}
+                            {% elif record.is_personally %}
                                 <td colspan="2" class="table-warning" style="transform: rotate(0);">
                             {% elif record.service_type.id == 5 %}
                                 <td colspan="2" class="table-info" style="transform: rotate(0);">
@@ -103,7 +103,7 @@
                         {% elif record.is_finish %}
                             {% if record.is_temperature %}
                                 <td class="table-warning" style="transform: rotate(0);">
-                            {% if record.is_personally %}
+                            {% elif record.is_personally %}
                                 <td class="table-warning" style="transform: rotate(0);">
                             {% elif record.service_type.id == 5 %}
                                 <td class="table-info" style="transform: rotate(0);">
