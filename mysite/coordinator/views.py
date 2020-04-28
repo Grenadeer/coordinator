@@ -165,10 +165,11 @@ def record_send(request, pk):
 
 @permission_required('coordinator.change_record', raise_exception=True)
 def record_finish(request, pk, service_type_pk):
+    next = request.GET.get('next', 'record_summary')
     record = get_object_or_404(Record, pk=pk)
     service_type = get_object_or_404(ServiceType, pk=service_type_pk)
     record.finish(service_type)
-    return redirect('record_summary')
+    return redirect(next)
 
 
 class RecordCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -227,8 +228,6 @@ class RecordUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 class RecordListJSONView(PermissionRequiredMixin, View):
     permission_required = 'coordinator.view_record'
-# class RecordListJSONView(LoginRequiredMixin, View):
-# class RecordListJSONView(View):
 
     def get(self, request):
         data = request.GET.get('data')
