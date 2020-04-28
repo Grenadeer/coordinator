@@ -2,7 +2,7 @@
 function getData(data) {
     var str = "data=" + data;
     $.ajax({
-        url: '/record/json/list',
+        url: '/record/json/list/',
         type: 'get',
         data: str,
         dataType: 'json',

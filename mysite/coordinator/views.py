@@ -225,10 +225,10 @@ class RecordUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 
 
-# class RecordListJSONView(PermissionRequiredMixin, View):
-#     permission_required = 'coordinator.view_record'
+class RecordListJSONView(PermissionRequiredMixin, View):
+    permission_required = 'coordinator.view_record'
 # class RecordListJSONView(LoginRequiredMixin, View):
-class RecordListJSONView(View):
+# class RecordListJSONView(View):
 
     def get(self, request):
         data = request.GET.get('data')
