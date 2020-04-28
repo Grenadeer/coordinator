@@ -165,11 +165,11 @@ def record_send(request, pk):
 
 @permission_required('coordinator.change_record', raise_exception=True)
 def record_finish(request, pk, service_type_pk):
-    next = request.GET.get('next', 'record_summary')
+    next_url = request.GET.get('next', 'record_summary')
     record = get_object_or_404(Record, pk=pk)
     service_type = get_object_or_404(ServiceType, pk=service_type_pk)
     record.finish(service_type)
-    return redirect(next)
+    return redirect(next_url)
 
 
 class RecordCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
