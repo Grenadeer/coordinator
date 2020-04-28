@@ -71,7 +71,7 @@
                         {% if record.is_canceled %}
                             <td colspan="2" class="table-secondary" style="transform: rotate(0);">
                         {% elif record.is_finish %}
-                            {% if record.is_temperature %}
+                            {% if record.service_type.id == 2 %}
                                 <td colspan="2" class="table-danger" style="transform: rotate(0);">
                             {% elif record.is_personally %}
                                 <td colspan="2" class="table-warning" style="transform: rotate(0);">
@@ -101,8 +101,8 @@
                         {% if record.is_canceled %}
                             <td class="table-secondary" style="transform: rotate(0);">
                         {% elif record.is_finish %}
-                            {% if record.is_temperature %}
-                                <td class="table-warning" style="transform: rotate(0);">
+                            {% if record.service_type.id == 2 %}
+                                <td class="table-danger" style="transform: rotate(0);">
                             {% elif record.is_personally %}
                                 <td class="table-warning" style="transform: rotate(0);">
                             {% elif record.service_type.id == 5 %}
