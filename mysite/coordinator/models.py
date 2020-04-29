@@ -257,7 +257,7 @@ class Record(models.Model):
     class Meta:
         verbose_name = "Вызов"
         verbose_name_plural = "Вызовы"
-        permissions = [('view_own', 'Can view own')]
+        permissions = [('view_own_record', 'Can view own')]
 
     def get_address(self):
         return self.address_street + " " + self.address_building + "-" + self.address_apartment

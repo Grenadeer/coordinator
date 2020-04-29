@@ -32,7 +32,10 @@ urlpatterns = [
     # Records
 
     # views and forms
-    path('record/summary/', views.record_summary, name='record_summary'),
+    # path('record/summary/', views.record_summary, name='record_summary'),
+    path('record/summary/', views.RecordSummary.as_view(), name='record_summary'),
+    # path('record/management/', views.record_management, name='record_management'),
+    path('record/management/', views.RecordManagement.as_view(), name='record_management'),
     path('record/', ListView.as_view(
         queryset=Record.objects.all(),
         template_name='record_list.html',
