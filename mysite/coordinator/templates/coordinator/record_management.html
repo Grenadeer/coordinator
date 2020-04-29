@@ -40,6 +40,53 @@
         </div>
     </div>
 
+    <h1>Статистика</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Подразделение</th>
+                <th>Отменено</th>
+                <th>Температурные</th>
+                <th>Лично</th>
+                <th>По телефону</th>
+                <th>Не открыли</th>
+                <th>Незавершенные</th>
+                <th>Всего</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for element in statistics %}
+            <tr>
+                <td>
+                    {{ element.department }}
+                </td>
+                <td class="table-secondary">
+                    {{ element.records_canceled }}
+                </td>
+                <td class="table-danger">
+                    {{ element.records_temperature }}
+                </td>
+                <td class="table-warning">
+                    {{ element.records_personally }}
+                </td>
+                <td class="table-success">
+                    {{ element.records_telephone }}
+                </td>
+                <td class="table-info">
+                    {{ element.records_didnt_open }}
+                </td>
+                <td class="table-light">
+                    {{ element.records_unfinished }}
+                </td>
+                <td class="table-light">
+                    {{ element.records_total }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     <h1>Текущее расписание</h1>
 
     <div>
@@ -231,53 +278,6 @@
                         {% endif %}
                     </td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <h1>Статистика</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Подразделение</th>
-                <th>Отменено</th>
-                <th>Температурные</th>
-                <th>Лично</th>
-                <th>По телефону</th>
-                <th>Не открыли</th>
-                <th>Незавершенные</th>
-                <th>Всего</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for element in statistics %}
-            <tr>
-                <td>
-                    {{ element.department }}
-                </td>
-                <td class="table-secondary">
-                    {{ element.records_canceled }}
-                </td>
-                <td class="table-danger">
-                    {{ element.records_temperature }}
-                </td>
-                <td class="table-warning">
-                    {{ element.records_personally }}
-                </td>
-                <td class="table-success">
-                    {{ element.records_telephone }}
-                </td>
-                <td class="table-info">
-                    {{ element.records_didnt_open }}
-                </td>
-                <td class="table-light">
-                    {{ element.records_unfinished }}
-                </td>
-                <td class="table-light">
-                    {{ element.records_total }}
-                </td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>
