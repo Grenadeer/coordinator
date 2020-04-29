@@ -97,7 +97,7 @@ class RecordSummary(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         departments = Department.objects.all()
         for department in departments:
             records_by_date = Record.objects.all().filter(department=department).filter(start_date__date=work_date)
-            records_total = records_by_date.exclude(doctor=None).count()
+            records_total = records_by_date.count()
             records_finished = records_by_date.exclude(finish_date=None)
             records_canceled = records_by_date.filter(service_type__id=1).count()
             records_temperature = records_finished.filter(service_type__id=2).count()
@@ -119,7 +119,7 @@ class RecordSummary(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             )
         # Итоговая
         records_by_date = Record.objects.all().filter(start_date__date=work_date)
-        records_total = records_by_date.exclude(doctor=None).count()
+        records_total = records_by_date.count()
         records_finished = records_by_date.exclude(finish_date=None)
         records_canceled = records_by_date.filter(service_type__id=1).count()
         records_temperature = records_finished.filter(service_type__id=2).count()
