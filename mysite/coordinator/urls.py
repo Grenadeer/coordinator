@@ -42,7 +42,7 @@ urlpatterns = [
     path('record/day/today/', views.RecordTodayArchiveView.as_view(), name='record_today'),
     path('record/<int:pk>/', DetailView.as_view(
         model=Record,
-        template_name='generic_detail.html',
+        template_name='coordinator/record_detail.html',
     ), name='record_detail'),
     path('record/create/', views.RecordCreateView.as_view(), name='record_create'),
     path('record/update/<int:pk>/', views.RecordUpdateView.as_view(), name='record_update'),

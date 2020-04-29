@@ -1,0 +1,94 @@
+
+{% extends 'base_management.html' %}
+
+{% block content %}
+
+    <div class="form">
+
+        <div class="form-group">
+            <label for="idInput">Номер вызова</label>
+            <input type="input" class="form-control" id="idInput" readonly value="{{ object.id }}">
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="start_date">Получен</label>
+                    <input type="input" class="form-control" id="start_date" readonly value="{{ object.start_date }}">
+                </div>
+                <div class="col">
+                    <label for="send_date">Передан</label>
+                    <input type="input" class="form-control" id="send_date" readonly value="{{ object.send_date }}">
+                </div>
+                <div class="col">
+                    <label for="finish_date">Передан</label>
+                    <input type="input" class="form-control" id="finish_date" readonly value="{{ object.send_date }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="department">Подразделение</label>
+                    <input type="input" class="form-control" id="department" readonly value="{{ object.department }}">
+                </div>
+                <div class="col">
+                    <label for="doctor">Назначенный врач</label>
+                    <input type="input" class="form-control" id="doctor" readonly value="{{ object.doctor }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="address_street">Улица</label>
+                    <input type="input" class="form-control" id="address_street" readonly value="{{ object.address_street }}">
+                </div>
+                <div class="col">
+                    <label for="address_building">Номер дома</label>
+                    <input type="input" class="form-control" id="address_building" readonly value="{{ object.address_building }}">
+                </div>
+                <div class="col">
+                    <label for="address_apartment">Номер квартиры</label>
+                    <input type="input" class="form-control" id="address_apartment" readonly value="{{ object.address_apartment }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="patient">Пациент</label>
+                    <input type="input" class="form-control" id="patient" readonly value="{{ object.patient }}">
+                </div>
+                <div class="col">
+                    <label for="patient_birthdate">Дата рождения</label>
+                    <input type="input"
+                           class="form-control"
+                           id="patient_birthdate"
+                           readonly value="{{ object.patient_birthdate|date:'d.m.Y' }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="service_type">Вид обслуживания</label>
+                    <input type="input" class="form-control" id="service_type" readonly value="{{ object.service_type }}">
+                </div>
+                <div class="col">
+                    <label for="temperature">Температурный</label>
+                    <input type="input"
+                           class="form-control"
+                           id="temperature"
+                           readonly value="{{ object.temperature }}">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
