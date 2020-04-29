@@ -5,6 +5,7 @@
 
     <div class="container">
         <div class="row">
+
             <div class="col-sm">
                 <div class="px-2">
                     <form class="form-inline justify-content-center" action="#" method="get">
@@ -16,17 +17,18 @@
                 </div>
                 <p class="text-center"><small>Рабочая дата</small></p>
             </div>
+
             <div class="col-sm">
                 <form class="form-inline justify-content-center" action="#" method="get">
                     <div class="form-group">
                         {% if user.is_staff %}
                         <select name="work_department" id="work_department_id" class="form-control">
-                            {% for element in statistics %}
-                                {% if element.department.id == work_department.id %}
-                                <option value="{{ element.department.id }}" selected>{{ element.department }}</option>
-                                {% else %}
-                                <option value="{{ element.department.id }}">{{ element.department }}</option>
+                            {% for department in departments %}
+                                <option value="{{ department.id }}"
+                                {% if department.id == work_department.id %}
+                                selected
                                 {% endif %}
+                                >{{ department }}</option>
                             {% endfor %}
                         </select>
                         <input type="submit" class="btn btn-secondary btn-md" value="Изменить">
@@ -37,6 +39,7 @@
                 </form>
                 <p class="text-center"><small>Подразделение</small></p>
             </div>
+
         </div>
     </div>
 

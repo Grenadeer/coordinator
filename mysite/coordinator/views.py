@@ -131,12 +131,16 @@ def record_summary(request):
     # Перечень не назначенных вызовов
     unrelated = Record.unassigned_by_date_department(work_date, work_department)
 
+    # Перечень подразделений для выбора
+    departments = Department.objects.all
+
     return render(
         request,
         'coordinator/record_summary.html',
         {
             'work_date_get': work_date_get,
             'work_department': work_department,
+            'departments': departments,
             'unrelated': unrelated,
             'doctors_records': doctors_records,
             'records_head': [i for i in range(1, record_max + 1)],
@@ -238,15 +242,18 @@ class RecordListJSONView(PermissionRequiredMixin, View):
         records = list(
             Record.objects.all().filter(start_date__date=timezone.now()).filter(address_street__contains=data).values(
                 "id",
+                "department__name",
                 "address_street",
                 "address_building",
                 "address_apartment",
                 "patient",
                 "doctor__name",
+                "service_type__name",
             )
         )
         data = dict()
         data['records'] = records
+        print(records)
         return JsonResponse(data)
 
 
