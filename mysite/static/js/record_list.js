@@ -23,7 +23,7 @@ function getData(data) {
             if (data.records.length == 0) {
                 rows += `
                 <tr>
-                    <td colspan=3 class="text-center">Нет совпадений</td>
+                    <td colspan=5 class="text-center">Нет совпадений</td>
                 </tr>`;
             }
             data.records.forEach(record => {

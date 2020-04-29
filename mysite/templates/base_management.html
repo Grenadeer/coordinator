@@ -12,6 +12,8 @@
           crossorigin="anonymous">
     <link href="{% static '/open-iconic/font/css/open-iconic-bootstrap.css' %}"
           rel="stylesheet">
+    <link rel="stylesheet"
+          href="{% static 'base.css' %}">
     <script src="{% static '/js/jquery-3.4.1.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -31,32 +33,27 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse" id="navbarCollapse" style>
+
             <ul class="navbar-nav mr-auto">
-                {% if perms.coordinator.view_record %}
                 <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'record_summary' %}">Сводная</a>
+                  <a class="nav-link" href="{% url 'record_management' %}">Сводная</a>
                 </li>
-                {% elif perms.coordinator.view_own_record %}
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'doctor_schedule' %}">Расписание</a>
-                </li>
-                {% endif %}
-                {% if perms.coordinator.view_doctor %}
+                <!--
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'doctor_list' %}">Врачи</a>
                 </li>
-                {% endif %}
-                {% if perms.coordinator.view_record %}
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'record_today' %}">Вызовы</a>
-                </li>
-                {% endif %}
+                </li>-->
             </ul>
+
+            <!--
             <ul class="navbar-nav mr-auto">
                 <li class="navbar-nav">
                     <a class="nav-link active" href="/about/">О проекте</a>
                 </li>
-            </ul>
+            </ul>-->
+
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
                 <li class="nav-item active">

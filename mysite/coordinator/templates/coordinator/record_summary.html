@@ -19,24 +19,29 @@
             </div>
 
             <div class="col-sm">
-                <form class="form-inline justify-content-center" action="#" method="get">
+                <div class="form-inline justify-content-center">
                     <div class="form-group">
                         {% if user.is_staff %}
-                        <select name="work_department" id="work_department_id" class="form-control">
+                            <div class="btn-group" role="group" aria-label="Выбор подразделения">
                             {% for department in departments %}
-                                <option value="{{ department.id }}"
-                                {% if department.id == work_department.id %}
-                                selected
-                                {% endif %}
-                                >{{ department }}</option>
+                                <a
+                                        type="button"
+                                        {% if department.id == work_department.id %}
+                                        class="btn btn-info"
+                                        {% else %}
+                                        class="btn btn-secondary"
+                                        {% endif %}
+                                        href="{% url 'record_management' %}?work_department={{ department.id}}"
+                                >
+                                    {{ department }}
+                                </a>
                             {% endfor %}
-                        </select>
-                        <input type="submit" class="btn btn-secondary btn-md" value="Изменить">
+                            </div>
                         {% else %}
                         <input type="text" class="form-control text-right" value="{{ user.profile.department }}" disabled>
                         {% endif %}
                     </div>
-                </form>
+                </div>
                 <p class="text-center"><small>Подразделение</small></p>
             </div>
 

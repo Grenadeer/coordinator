@@ -68,7 +68,7 @@ class RecordSummary(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         work_date = make_aware(datetime.strptime(work_date_get, date_format))
         # Обновляем данные сессии
         self.request.session['work_date'] = work_date_get
-        context['work_day_get'] = work_date_get
+        context['work_date_get'] = work_date_get
 
         # Основная таблица вызовов по докторам
         record_max = 3  # Количество пустых столбцов расписания, которые всегда видны
