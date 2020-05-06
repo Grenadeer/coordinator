@@ -1,9 +1,11 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
+from changelog.mixins import ChangeLogMixin
+from changelog.signals import changelog_save_handler, changelog_delete_handler
 
 
 class Department(models.Model):
@@ -147,7 +149,7 @@ class ServiceType(models.Model):
         verbose_name_plural = "Виды обслуживания"
 
 
-class Record(models.Model):
+class Record(ChangeLogMixin, models.Model):
     start_date = models.DateTimeField(
         default=timezone.now,
         help_text="Дата регистрации вызова",
@@ -351,3 +353,7 @@ class Record(models.Model):
         self.service_type = service_type
         self.save()
         return
+
+
+post_save.connect(changelog_save_handler, sender=Record)
+post_delete.connect(changelog_delete_handler, sender=Record)

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'coordinator',
+    'changelog',
 ]
 
 MIDDLEWARE = [
