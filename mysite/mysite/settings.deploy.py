@@ -24,7 +24,6 @@ SECRET_KEY = 'is64b&)g#06o89#s#uuw=p5imwx6$psvlq1u%32x6xdt1l6-pf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-# DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -45,8 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
-    'django.contrib.flatpages',
     'coordinator'
 ]
 
@@ -58,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -140,7 +136,6 @@ DATE_INPUT_FORMATS = [
     '%d.%m.%Y',
 ]
 
-SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

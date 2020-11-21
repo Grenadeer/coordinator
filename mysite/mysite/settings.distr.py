@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -23,18 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'is64b&)g#06o89#s#uuw=p5imwx6$psvlq1u%32x6xdt1l6-pf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# DEBUG = True
+DEBUG = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '[::1]',
-    '10.15.0.222',
-    'srv-tetta.kgb5.local',
-    'kgb5.stima.cc'
-]
-
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -47,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'coordinator'
+    'coordinator',
 ]
 
 MIDDLEWARE = [
@@ -81,35 +71,23 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mysite.wsgi.application'
-
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'coordinator',
-        'USER': 'coordinator',
-        'PASSWORD': 'PUYRSgeXP9tCoBIV',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-            },
-        'TIME_ZONE': 'Europe/Moscow',
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    #{
-    #    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    #},
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
@@ -137,7 +115,7 @@ USE_TZ = True
 
 DATE_INPUT_FORMATS = [
     '%d.%m.%Y',
-    '%d.%m.%Y',
+    '%d.%m.%y',
 ]
 
 SITE_ID = 1
@@ -146,10 +124,11 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'c:/xampp/htdocs/coordinator/mysite/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 LOGIN_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 36000
-
-# SECURE_SSL_REDIRECT = True
+WSGI_APPLICATION = 'mysite.wsgi.application'
