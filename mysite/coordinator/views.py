@@ -77,15 +77,19 @@ class RecordSummary(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         for doctor in doctors:
             records = []
             record_count = 0
+            record_done_count = 0
             for record in doctor.records_by_date(work_date):
                 records.append(record)
                 record_count += 1
+                if record.is_finish():
+                    record_done_count += 1
             record_max = max(record_max, record_count)
             doctors_records.append(
                 {
                     'doctor': doctor,
                     'records': records,
                     'count': record_count,
+                    'done_count': record_done_count,
                 }
             )
         context['records_head'] = [i for i in range(1, record_max + 1)]
